@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const requestIp = require("request-ip");
+const morgan = require("morgan");
+const router = require("./router");
 const { welcomeNote } = require("./constant/constant");
 const connectDb = require("./config/db");
 
@@ -16,10 +18,13 @@ app.use(
     credentials: true, // Allow cookies to be sent
   })
 );
+app.use(express.static("uploads")); // Serve static files from the uploads directory
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestIp.mw());
+app.use(morgan("dev")); // Logging middleware
+app.use(router);
 
 /**
  * Welcome Route
