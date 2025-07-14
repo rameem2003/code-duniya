@@ -1,4 +1,25 @@
+const deleteFile = require("../lib/deleteFile");
 const categoryModel = require("../models/category.model");
+
+const findCategoryById = async (id) => {
+  try {
+    let res = await categoryModel.findById(id);
+
+    return res;
+  } catch (error) {
+    throw new Error("Error finding category: " + error.message);
+  }
+};
+
+const thumbImageGenerator = (thumb) => {
+  if (thumb) {
+    let link =
+      process.env.SYSTEM_ENV == "development"
+        ? `http://localhost:5000/${thumb}`
+        : `https://code-duniya.onrender.com/uploads/${thumb}`;
+    return link;
+  }
+};
 
 const getAllCategories = async () => {
   try {
@@ -9,16 +30,11 @@ const getAllCategories = async () => {
   }
 };
 
-const uploadCategory = async ({ name, thumb }) => {
+const uploadCategory = async ({ name, thumbLink }) => {
   try {
-    let thumbLink =
-      process.env.SYSTEM_ENV == "development"
-        ? `http://localhost:5000/${thumb}`
-        : `https://code-duniya.onrender.com/uploads/${thumb}`;
     let data = {
       name,
-      thumb:
-        thumbLink || "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+      thumb: thumbImageGenerator(thumbLink),
     };
     let newCategory = new categoryModel(data);
 
@@ -29,7 +45,47 @@ const uploadCategory = async ({ name, thumb }) => {
   }
 };
 
+const categoryUpdate = async (id, updateFields, file) => {
+  try {
+    let targetCategory = await findCategoryById(id);
+
+    await categoryModel.findOneAndUpdate(
+      { _id: targetCategory._id },
+      { $set: { ...updateFields, thumb: thumbImageGenerator(file) } }
+    );
+
+    if (file && !targetCategory.thumb.includes("flaticon")) {
+      let thumb = targetCategory.thumb.split("/");
+      let fileName = thumb[thumb.length - 1];
+
+      await deleteFile(fileName);
+    }
+  } catch (error) {
+    throw new Error("Error updating category: " + error.message);
+  }
+};
+
+const categoryDelete = async (id) => {
+  try {
+    let targetCategory = await findCategoryById(id);
+    if (!targetCategory.thumb.includes("flaticon")) {
+      let thumb = targetCategory.thumb.split("/");
+      let file = thumb[thumb.length - 1];
+
+      await deleteFile(file);
+    }
+    let res = await categoryModel.findByIdAndDelete(id);
+    return res;
+  } catch (error) {
+    throw new Error("Error deleting category: " + error.message);
+  }
+};
+
 module.exports = {
+  thumbImageGenerator,
+  findCategoryById,
   getAllCategories,
   uploadCategory,
+  categoryUpdate,
+  categoryDelete,
 };
