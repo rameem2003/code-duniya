@@ -6,7 +6,8 @@ const {
   updateCourse,
   getSingleCourse,
 } = require("../../controller/courses.controller");
-const upload = require("../../middlewares/fileUpload");
+const createUploadMiddleware = require("../../middlewares/fileUpload");
+const upload = createUploadMiddleware({ type: "thumb" });
 
 /**
  * All Course Route

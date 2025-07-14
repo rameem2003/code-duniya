@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const courses = require("./course");
 const categories = require("./category");
+const successStory = require("./success_story");
 const api_base = process.env.API_VERSION_BASE || "/api/v1";
 
 /**
@@ -15,5 +16,11 @@ router.use(api_base, courses);
  * https://localhost:5000/api/v1/category
  */
 router.use(api_base, categories);
+
+/**
+ * Success Story Routes
+ * https://localhost:5000/api/v1/successstory
+ */
+router.use(api_base, successStory);
 
 module.exports = router;

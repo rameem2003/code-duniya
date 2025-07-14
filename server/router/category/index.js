@@ -5,7 +5,8 @@ const {
   updateCategory,
   getSingleCategory,
 } = require("../../controller/category.controller");
-const upload = require("../../middlewares/fileUpload");
+const createUploadMiddleware = require("../../middlewares/fileUpload");
+const upload = createUploadMiddleware({ type: "thumb" });
 
 const router = require("express").Router();
 

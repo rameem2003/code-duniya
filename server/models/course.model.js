@@ -35,6 +35,13 @@ const courseSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+
+    successStories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SuccessStory",
+      },
+    ],
   },
   {
     timestamps: true,

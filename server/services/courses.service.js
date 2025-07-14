@@ -5,7 +5,10 @@ const { thumbImageGenerator } = require("./common.service");
 
 const findCourseById = async (id) => {
   try {
-    let res = await courseModel.findById(id).populate("category");
+    let res = await courseModel
+      .findById(id)
+      .populate("category")
+      .populate("successStories");
     return res;
   } catch (error) {
     throw new Error("Error finding category: " + error.message);
@@ -14,7 +17,10 @@ const findCourseById = async (id) => {
 
 const getAllCourses = async () => {
   try {
-    let res = await courseModel.find().populate("category");
+    let res = await courseModel
+      .find()
+      .populate("category")
+      .populate("successStories");
     return res;
   } catch (error) {
     throw new Error("Error fetching courses: " + error.message);
