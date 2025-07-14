@@ -1,5 +1,6 @@
 const deleteFile = require("../lib/deleteFile");
 const categoryModel = require("../models/category.model");
+const { thumbImageGenerator } = require("./common.service");
 
 const findCategoryById = async (id) => {
   try {
@@ -8,16 +9,6 @@ const findCategoryById = async (id) => {
     return res;
   } catch (error) {
     throw new Error("Error finding category: " + error.message);
-  }
-};
-
-const thumbImageGenerator = (thumb) => {
-  if (thumb) {
-    let link =
-      process.env.SYSTEM_ENV == "development"
-        ? `http://localhost:5000/${thumb}`
-        : `https://code-duniya.onrender.com/uploads/${thumb}`;
-    return link;
   }
 };
 
@@ -82,7 +73,6 @@ const categoryDelete = async (id) => {
 };
 
 module.exports = {
-  thumbImageGenerator,
   findCategoryById,
   getAllCategories,
   uploadCategory,
