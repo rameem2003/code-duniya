@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin", "moderator"],
+    },
     block: {
       type: Boolean,
       default: false,
@@ -30,6 +35,12 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
+      },
+    ],
+    successStories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SuccessStory",
       },
     ],
   },

@@ -1,6 +1,7 @@
 const deleteFile = require("../lib/deleteFile");
 const courseModel = require("../models/course.model");
 const successStoryModel = require("../models/successStory.model");
+const userModel = require("../models/user.model");
 const { thumbImageGenerator } = require("./common.service");
 
 const findAllStories = async () => {
@@ -56,6 +57,13 @@ const uploadSuccessStory = async ({ userID, course, videoLink, thumbLink }) => {
       { new: true }
     );
 
+    // update the user with the new success story
+    await userModel.findByIdAndUpdate(
+      { _id: userID },
+      { $push: { successStories: newSuccessStory._id } },
+      { new: true }
+    );
+
     return newSuccessStory;
   } catch (error) {
     throw new Error("Error uploading success story: " + error.message);
@@ -76,6 +84,15 @@ const storyDelete = async (id) => {
     // Remove the story from the course
     await courseModel.findOneAndUpdate(
       { _id: targetStory.course },
+      {
+        $pull: { successStories: targetStory._id },
+      },
+      { new: true }
+    );
+
+    // Remove the story from the user
+    await userModel.findOneAndUpdate(
+      { _id: targetStory.userID },
       {
         $pull: { successStories: targetStory._id },
       },

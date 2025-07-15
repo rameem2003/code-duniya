@@ -1,10 +1,18 @@
 const thumbImageGenerator = (thumb) => {
   if (thumb) {
-    let link =
-      process.env.SYSTEM_ENV == "development"
-        ? `http://localhost:5000/thumbnails/${thumb}`
-        : `https://code-duniya.onrender.com/uploads/${thumb}`;
-    return link;
+    if (thumb.includes("thumb")) {
+      let link =
+        process.env.SYSTEM_ENV == "development"
+          ? `http://localhost:5000/thumbnails/${thumb}`
+          : `https://code-duniya.onrender.com/uploads/${thumb}`;
+      return link;
+    } else if (thumb.includes("avatar")) {
+      let link =
+        process.env.SYSTEM_ENV == "development"
+          ? `http://localhost:5000/avatars/${thumb}`
+          : `https://code-duniya.onrender.com/uploads/${thumb}`;
+      return link;
+    }
   }
 };
 
