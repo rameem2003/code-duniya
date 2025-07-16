@@ -6,6 +6,9 @@ const {
   createRandomToken,
   saveVerificationToken,
   createEmailLink,
+  verifyPassword,
+  authenticateUser,
+  clearSession,
 } = require("../services/auth.service");
 const {
   loginValidator,
@@ -21,8 +24,28 @@ const login = async (req, res) => {
   if (error) {
     return res
       .status(400)
-      .send({ success: false, msg: error.errors[0].message });
+      .json({ success: false, message: "Invalid email or password" });
   }
+
+  let user = await findUserByEmail(data.email);
+
+  if (!user) {
+    return res.status(400).send({ success: false, message: "User not found" });
+  }
+
+  let isPasswordMatch = await verifyPassword(data.password, user.password);
+
+  if (!isPasswordMatch) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Invalid password" });
+  }
+
+  let authdata = await authenticateUser({ req, res, user });
+
+  return res
+    .status(200)
+    .send({ success: true, message: "Login successful", data: authdata });
 };
 
 /**
@@ -40,7 +63,9 @@ const register = async (req, res) => {
   let existUser = await findUserByEmail(data.email);
 
   if (existUser) {
-    return res.status(400).send({ success: false, msg: "User already exist" });
+    return res
+      .status(400)
+      .send({ success: false, message: "User already exist" });
   }
 
   let hashPassword = await hashedPassword(data.password);
@@ -66,7 +91,18 @@ const register = async (req, res) => {
   await sendEmail(data.email, "Email Verification", emailBody);
   return res
     .status(200)
-    .send({ success: true, msg: "User created successfully", user });
+    .send({ success: true, message: "User created successfully", user });
 };
 
-module.exports = { login, register };
+const logout = async (req, res) => {
+  if (!req.user)
+    return res.status(400).send({ success: false, message: "User not found" });
+
+  await clearSession(req.user.session);
+  res.clearCookie("access_token");
+  res.clearCookie("refresh_token");
+  return res
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
+};
+module.exports = { login, register, logout };

@@ -7,13 +7,14 @@ const {
   getSingleCourse,
 } = require("../../controller/courses.controller");
 const createUploadMiddleware = require("../../middlewares/fileUpload");
+const verifyAuthentication = require("../../middlewares/middleware");
 const upload = createUploadMiddleware({ type: "thumb" });
 
 /**
  * All Course Route
  * https://localhost:5000/api/v1/courses/
  */
-router.get("/courses/", allCourses);
+router.get("/courses/", verifyAuthentication, allCourses);
 
 /**
  * Get single course controller

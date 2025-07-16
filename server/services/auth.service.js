@@ -1,7 +1,23 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/user.model");
 const emailVerifyTokenModel = require("../models/emailVerifyToken.model");
+const sessionModel = require("../models/session.model");
 const { thumbImageGenerator } = require("./common.service");
+const {
+  ACCESS_TOKEN_EXPIRY,
+  MILLISECONDS_PER_SECOND,
+  REFRESH_TOKEN_EXPIRY,
+} = require("../constant/constant");
+
+const findUserById = async (id) => {
+  try {
+    let user = await userModel.findOne({ _id: id });
+    return user;
+  } catch (error) {
+    throw new Error("Error finding user: " + error.message);
+  }
+};
 
 const findUserByEmail = async (email) => {
   try {
@@ -9,6 +25,16 @@ const findUserByEmail = async (email) => {
     return res;
   } catch (error) {
     throw new Error("Error finding user: " + error.message);
+  }
+};
+
+const findSessionById = async (id) => {
+  try {
+    let session = await sessionModel.findOne({ _id: id });
+
+    return session;
+  } catch (error) {
+    throw new Error("Error finding session: " + error.message);
   }
 };
 
@@ -25,6 +51,121 @@ const createNewUser = async ({ name, email, password, role, avatarLink }) => {
     return res._id;
   } catch (error) {
     throw new Error("Error creating user: " + error.message);
+  }
+};
+
+const authenticateUser = async ({ req, res, user }) => {
+  const session = await createSession(
+    user._id,
+    req.headers["user-agent"],
+    req.ip
+  );
+  const accessToken = createAccessToken({
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    isVerified: user.isVerified,
+    avatar: user.avatar,
+    session: session._id,
+  });
+
+  const refreshToken = createRefreshToken(session._id);
+
+  const baseConfig = { httpOnly: true, secure: true };
+
+  res.cookie("access_token", accessToken, {
+    ...baseConfig,
+    maxAge: ACCESS_TOKEN_EXPIRY,
+  });
+
+  res.cookie("refresh_token", refreshToken, {
+    ...baseConfig,
+    maxAge: REFRESH_TOKEN_EXPIRY,
+  });
+};
+
+const verifyJWTToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
+
+const createSession = async (userId, userAgent, ip) => {
+  try {
+    const session = new sessionModel({
+      userId,
+      userAgent,
+      ip,
+    });
+    await session.save();
+
+    return session;
+  } catch (error) {
+    throw new Error("Error creating session: " + error.message);
+  }
+};
+
+const clearSession = async (sessionId) => {
+  try {
+    await sessionModel.findOneAndDelete({ _id: sessionId });
+  } catch (error) {
+    throw new Error("Error clearing session: " + error.message);
+  }
+};
+
+const createAccessToken = ({
+  id,
+  name,
+  email,
+  role,
+  isVerified,
+  avatar,
+  session,
+}) => {
+  return jwt.sign({ id, name, email, session }, process.env.JWT_SECRET, {
+    expiresIn: ACCESS_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND, //   expiresIn: "15m",
+  });
+};
+
+const createRefreshToken = (sessionId) => {
+  return jwt.sign({ sessionId }, process.env.JWT_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND, //   expiresIn: "1w",
+  });
+};
+
+const refreshTokens = async (refreshToken) => {
+  try {
+    const decodedToken = verifyJWTToken(refreshToken);
+
+    const currentSession = await findSessionById(decodedToken.sessionId);
+
+    if (!currentSession) {
+      throw new Error("Invalid session");
+    }
+
+    const user = await findUserById(currentSession.userId);
+
+    if (!user) throw new Error("Invalid User");
+
+    const userInfo = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified,
+      avatar: user.avatar,
+      session: currentSession._id,
+    };
+
+    const newAccessToken = createAccessToken(userInfo);
+    const newRefreshToken = createRefreshToken(currentSession._id);
+
+    return {
+      newAccessToken,
+      newRefreshToken,
+      user: userInfo,
+    };
+  } catch (error) {
+    console.log(error.message);
   }
 };
 
@@ -59,11 +200,25 @@ const createRandomToken = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
 
+const verifyPassword = async (password, hashedPassword) => {
+  return await bcrypt.compare(password, hashedPassword);
+};
+
 module.exports = {
+  findUserById,
   findUserByEmail,
+  findSessionById,
   createNewUser,
+  authenticateUser,
+  verifyJWTToken,
+  createSession,
+  clearSession,
+  createAccessToken,
+  createRefreshToken,
+  refreshTokens,
   saveVerificationToken,
   createEmailLink,
   hashedPassword,
   createRandomToken,
+  verifyPassword,
 };
