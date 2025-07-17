@@ -14,6 +14,14 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      default: "",
+    },
     avatar: {
       type: String,
       default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",

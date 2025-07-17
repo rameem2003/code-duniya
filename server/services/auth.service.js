@@ -9,6 +9,7 @@ const {
   MILLISECONDS_PER_SECOND,
   REFRESH_TOKEN_EXPIRY,
 } = require("../constant/constant");
+const deleteFile = require("../lib/deleteFile");
 
 const findUserById = async (id) => {
   try {
@@ -38,19 +39,58 @@ const findSessionById = async (id) => {
   }
 };
 
-const createNewUser = async ({ name, email, password, role, avatarLink }) => {
+const createNewUser = async ({
+  name,
+  email,
+  password,
+  role,
+  phone,
+  avatarLink,
+}) => {
   try {
     let res = new userModel({
       name,
       email,
       password,
       role,
+      phone,
       avatar: thumbImageGenerator(avatarLink),
     });
     await res.save();
     return res._id;
   } catch (error) {
     throw new Error("Error creating user: " + error.message);
+  }
+};
+
+const findUserAndUpdateProfile = async (id, updateFields, avatarPath) => {
+  try {
+    let targetUser = await findUserById(id);
+
+    await userModel.findOneAndUpdate(
+      { _id: targetUser._id },
+      { $set: { ...updateFields, avatar: thumbImageGenerator(avatarPath) } }
+    );
+
+    if (avatarPath && !targetUser.avatar.includes("flaticon")) {
+      let thumb = targetUser.avatar.split("/");
+      let fileName = thumb[thumb.length - 1];
+
+      await deleteFile(fileName);
+    }
+  } catch (error) {
+    throw new Error("Error updating course: " + error.message);
+  }
+};
+
+const updateUserPassword = async (id, newPassword) => {
+  try {
+    await userModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { password: newPassword } }
+    );
+  } catch (error) {
+    throw new Error("Error updating course: " + error.message);
   }
 };
 
@@ -238,6 +278,8 @@ module.exports = {
   findUserByEmail,
   findSessionById,
   createNewUser,
+  findUserAndUpdateProfile,
+  updateUserPassword,
   authenticateUser,
   verifyJWTToken,
   createSession,

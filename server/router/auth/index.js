@@ -5,6 +5,8 @@ const {
   getUserProfile,
   sendEmailVerificationToken,
   verifyEmailToken,
+  editProfile,
+  changePassword,
 } = require("../../controller/auth.controller");
 const createUploadMiddleware = require("../../middlewares/fileUpload");
 const verifyAuthentication = require("../../middlewares/middleware");
@@ -30,6 +32,23 @@ router.get("/auth/profile", verifyAuthentication, getUserProfile);
  * https://localhost:5000/api/v1/auth/register
  */
 router.post("/auth/register", upload.single("avatar"), register);
+
+/**
+ * User profile update route
+ * https://localhost:5000/api/v1/auth/update-profile
+ */
+router.patch(
+  "/auth/update-profile",
+  verifyAuthentication,
+  upload.single("avatar"),
+  editProfile
+);
+
+/**
+ * User password update route
+ * https://localhost:5000/api/v1/auth/update-password
+ */
+router.patch("/auth/update-password", verifyAuthentication, changePassword);
 
 /**
  * Send email verification token route

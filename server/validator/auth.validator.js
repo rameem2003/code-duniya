@@ -13,7 +13,7 @@ const emailValidator = z
 
 const passwordValidator = z
   .string()
-  .min(8, { message: "Password must be at least 4 characters long" })
+  .min(8, { message: "Password must be at least 8 characters long" })
   .max(15, { message: "Password must be at most 15 characters long" });
 
 const randomTokenValidator = z.string().min(6);
@@ -35,7 +35,22 @@ const registrationValidator = loginValidator.extend({
       message: "Role is required",
     })
     .default("user"),
+  phone: z
+    .string()
+    .trim()
+    .min(11, { message: "Phone number must be at least 11 characters long" }),
 });
+
+const changePasswordValidator = z
+  .object({
+    oldPassword: passwordValidator,
+    newPassword: passwordValidator,
+    confirmPassword: passwordValidator,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 module.exports = {
   nameValidator,
@@ -45,4 +60,5 @@ module.exports = {
   emailVerificationValidator,
   loginValidator,
   registrationValidator,
+  changePasswordValidator,
 };

@@ -13,11 +13,14 @@ const {
   validateVerificationToken,
   findUserAndUpdateEmailVerification,
   clearTokenSchema,
+  findUserAndUpdateProfile,
+  updateUserPassword,
 } = require("../services/auth.service");
 const {
   loginValidator,
   registrationValidator,
   emailVerificationValidator,
+  changePasswordValidator,
 } = require("../validator/auth.validator");
 
 /**
@@ -54,7 +57,7 @@ const login = async (req, res) => {
 };
 
 /**
- * Get user profile
+ * Get user profile controller
  */
 const getUserProfile = async (req, res) => {
   if (!req.user) {
@@ -93,6 +96,84 @@ const getUserProfile = async (req, res) => {
 };
 
 /**
+ * Edit user profile controller
+ */
+const editProfile = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+  const updateFields = {};
+
+  //  available fields to update
+  const fields = ["name", "email", "phone", "address"];
+
+  // fill up updateFields with the fields that are present in the request body
+  fields.forEach((field) => {
+    if (req.body[field] !== undefined) {
+      updateFields[field] = req.body[field];
+    }
+  });
+
+  try {
+    await findUserAndUpdateProfile(
+      req.user.id,
+      updateFields,
+      req?.file?.filename
+    );
+
+    return res
+      .status(200)
+      .send({ success: true, message: "Profile updated successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
+ * Change password controller
+ */
+const changePassword = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+
+  const { data, error } = changePasswordValidator.safeParse(req.body);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  let userExist = await findUserById(req.user.id);
+
+  if (!userExist) {
+    return res.status(400).send({ success: false, message: "User not found" });
+  }
+
+  let isPasswordMatch = await verifyPassword(
+    data.oldPassword,
+    userExist.password
+  );
+
+  if (!isPasswordMatch) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Invalid password" });
+  }
+
+  let hashPassword = await hashedPassword(data.newPassword);
+
+  await updateUserPassword(req.user.id, hashPassword);
+
+  return res
+    .status(200)
+    .send({ success: true, message: "Password changed successfully" });
+};
+
+/**
  * Register controller
  */
 const register = async (req, res) => {
@@ -119,6 +200,7 @@ const register = async (req, res) => {
     email: data.email,
     password: hashPassword,
     role: data.role,
+    phone: data.phone,
     avatarLink: req?.file?.filename,
   });
 
@@ -230,6 +312,8 @@ const logout = async (req, res) => {
 module.exports = {
   login,
   getUserProfile,
+  editProfile,
+  changePassword,
   register,
   sendEmailVerificationToken,
   verifyEmailToken,
