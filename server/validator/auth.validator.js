@@ -16,7 +16,12 @@ const passwordValidator = z
   .min(8, { message: "Password must be at least 4 characters long" })
   .max(15, { message: "Password must be at most 15 characters long" });
 
-const randomTokenValidator = z.number().int().min(6);
+const randomTokenValidator = z.string().min(6);
+
+const emailVerificationValidator = z.object({
+  email: emailValidator,
+  token: randomTokenValidator,
+});
 
 const loginValidator = z.object({
   email: emailValidator,
@@ -37,6 +42,7 @@ module.exports = {
   emailValidator,
   passwordValidator,
   randomTokenValidator,
+  emailVerificationValidator,
   loginValidator,
   registrationValidator,
 };

@@ -179,6 +179,35 @@ const saveVerificationToken = async (userID, token) => {
   }
 };
 
+const validateVerificationToken = async (userID, token) => {
+  try {
+    let tokenExist = await emailVerifyTokenModel.findOne({ userID, token });
+    return tokenExist;
+  } catch (error) {
+    throw new Error("Error validating verification token: " + error.message);
+  }
+};
+
+const findUserAndUpdateEmailVerification = async (id) => {
+  try {
+    let user = await userModel.findOneAndUpdate(
+      { _id: id },
+      { isVerified: true }
+    );
+    return user;
+  } catch (error) {
+    throw new Error("Error finding user: " + error.message);
+  }
+};
+
+const clearTokenSchema = async (userID) => {
+  try {
+    await emailVerifyTokenModel.findOneAndDelete({ userID });
+  } catch (error) {
+    throw new Error("Error clearing token schema: " + error.message);
+  }
+};
+
 const createEmailLink = (email, token) => {
   const url = new URL(
     process.env.SYSTEM_ENV == "development"
@@ -217,6 +246,9 @@ module.exports = {
   createRefreshToken,
   refreshTokens,
   saveVerificationToken,
+  validateVerificationToken,
+  findUserAndUpdateEmailVerification,
+  clearTokenSchema,
   createEmailLink,
   hashedPassword,
   createRandomToken,

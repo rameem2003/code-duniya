@@ -9,10 +9,15 @@ const {
   verifyPassword,
   authenticateUser,
   clearSession,
+  findUserById,
+  validateVerificationToken,
+  findUserAndUpdateEmailVerification,
+  clearTokenSchema,
 } = require("../services/auth.service");
 const {
   loginValidator,
   registrationValidator,
+  emailVerificationValidator,
 } = require("../validator/auth.validator");
 
 /**
@@ -49,6 +54,45 @@ const login = async (req, res) => {
 };
 
 /**
+ * Get user profile
+ */
+const getUserProfile = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+
+  try {
+    let user = await findUserById(req.user.id);
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+
+    return res.status(200).send({
+      success: true,
+      message: "User profile",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isVerified: user.isVerified,
+        avatar: user.avatar,
+        block: user.block,
+        courses: user.courses,
+        successStory: user.successStories,
+      },
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
  * Register controller
  */
 const register = async (req, res) => {
@@ -78,21 +122,98 @@ const register = async (req, res) => {
     avatarLink: req?.file?.filename,
   });
 
-  let randomToken = createRandomToken();
-
-  await saveVerificationToken(user, randomToken);
-
-  let emailLink = createEmailLink(data.email, randomToken);
-
-  let emailBody = `
-    <p>Click the link below to verify your email:</p>
-    <a href="${emailLink}">${emailLink}</a> or copy and paste it this code <b>${randomToken}</b> into your browser.`;
-
-  await sendEmail(data.email, "Email Verification", emailBody);
   return res
     .status(200)
     .send({ success: true, message: "User created successfully", user });
 };
+
+/**
+ * Send email verification controller
+ */
+const sendEmailVerificationToken = async (req, res) => {
+  if (!req.user)
+    return res.status(400).send({ success: false, message: "User not found" });
+
+  if (req.user.isVerified)
+    return res
+      .status(400)
+      .send({ success: false, message: "User already verified" });
+  try {
+    const exist = await findUserById(req.user.id);
+
+    if (!exist) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+    let randomToken = createRandomToken();
+
+    await saveVerificationToken(exist._id, randomToken);
+
+    let emailLink = createEmailLink(exist.email, randomToken);
+
+    let emailBody = `
+    <p>Click the link below to verify your email:</p>
+    <a href="${emailLink}">${emailLink}</a> or copy and paste it this code <b>${randomToken}</b> into your browser.`;
+
+    await sendEmail(exist.email, "Email Verification", emailBody);
+
+    return res
+      .status(200)
+      .send({ success: true, message: "Email sent successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
+ * Token verification controller
+ */
+const verifyEmailToken = async (req, res) => {
+  const { data, error } = emailVerificationValidator.safeParse(req.query);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  try {
+    const userExist = await findUserByEmail(data.email);
+
+    if (!userExist) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+
+    let validateToken = await validateVerificationToken(
+      userExist._id,
+      data.token
+    );
+
+    if (!validateToken) {
+      return res.status(400).send({ success: false, message: "Invalid token" });
+    }
+
+    await findUserAndUpdateEmailVerification(validateToken.userID);
+    await clearTokenSchema(validateToken._id);
+
+    return res
+      .status(200)
+      .send({ success: true, message: "Email verified successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
+ * Logout controller
+ */
 
 const logout = async (req, res) => {
   if (!req.user)
@@ -105,4 +226,12 @@ const logout = async (req, res) => {
     .status(200)
     .json({ success: true, message: "User logged out successfully" });
 };
-module.exports = { login, register, logout };
+
+module.exports = {
+  login,
+  getUserProfile,
+  register,
+  sendEmailVerificationToken,
+  verifyEmailToken,
+  logout,
+};
