@@ -15,12 +15,17 @@ const {
   clearTokenSchema,
   findUserAndUpdateProfile,
   updateUserPassword,
+  createResetPasswordTokenLink,
+  findResetPasswordToken,
+  clearResetPasswordToken,
 } = require("../services/auth.service");
 const {
   loginValidator,
   registrationValidator,
   emailVerificationValidator,
   changePasswordValidator,
+  emailValidator,
+  resetPasswordValidator,
 } = require("../validator/auth.validator");
 
 /**
@@ -174,6 +179,107 @@ const changePassword = async (req, res) => {
 };
 
 /**
+ * Reset password link send controller
+ */
+const sendResetPasswordToken = async (req, res) => {
+  const { data, error } = emailValidator.safeParse(req.body.email);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  let userExist = await findUserByEmail(data);
+
+  if (!userExist) {
+    return res.status(400).send({ success: false, message: "User not found" });
+  }
+
+  let link = await createResetPasswordTokenLink(userExist._id);
+
+  let emailBody = `
+    <p>Click the link below to verify your email:</p>
+    <a href="${link}">${link}</a> or copy and paste it this <b>${link}</b> into your browser.`;
+
+  await sendEmail(userExist.email, "Reset Password Token", emailBody);
+
+  return res
+    .status(200)
+    .send({ success: true, message: "Email sent successfully" });
+};
+
+/**
+ * Find reset password token
+ */
+const verifyResetPasswordToken = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    let resetToken = await findResetPasswordToken(token);
+
+    if (!resetToken) {
+      return res.status(400).send({ success: false, message: "Invalid token" });
+    }
+
+    let user = await findUserById(resetToken.userID);
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+
+    // return res.status(200).send({
+    //   success: true,
+    //   message: "Token is valid",
+    //   user,
+    // });
+
+    res.redirect("https://rolstudiobangladesh.vercel.app/");
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
+ * Reset password controller
+ */
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+
+  let existToken = await findResetPasswordToken(token);
+
+  if (!existToken) {
+    return res.status(400).send({ success: false, message: "Invalid token" });
+  }
+
+  const { data, error } = resetPasswordValidator.safeParse(req.body);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  let user = await findUserById(existToken.userID);
+
+  if (!user) {
+    return res.status(400).send({ success: false, message: "User not found" });
+  }
+
+  let hashPassword = await hashedPassword(data.newPassword);
+
+  await updateUserPassword(user._id, hashPassword);
+  await clearResetPasswordToken(existToken._id);
+
+  return res
+    .status(200)
+    .send({ success: true, message: "Password changed successfully" });
+};
+/**
  * Register controller
  */
 const register = async (req, res) => {
@@ -296,7 +402,6 @@ const verifyEmailToken = async (req, res) => {
 /**
  * Logout controller
  */
-
 const logout = async (req, res) => {
   if (!req.user)
     return res.status(400).send({ success: false, message: "User not found" });
@@ -314,6 +419,9 @@ module.exports = {
   getUserProfile,
   editProfile,
   changePassword,
+  sendResetPasswordToken,
+  verifyResetPasswordToken,
+  resetPassword,
   register,
   sendEmailVerificationToken,
   verifyEmailToken,

@@ -10,6 +10,7 @@ const {
   REFRESH_TOKEN_EXPIRY,
 } = require("../constant/constant");
 const deleteFile = require("../lib/deleteFile");
+const resetPasswordTokenModel = require("../models/resetPasswordToken.model");
 
 const findUserById = async (id) => {
   try {
@@ -240,6 +241,45 @@ const findUserAndUpdateEmailVerification = async (id) => {
   }
 };
 
+const findResetPasswordToken = async (token) => {
+  try {
+    let data = await resetPasswordTokenModel.findOne({ token });
+
+    return data;
+  } catch (error) {
+    throw new Error("Error finding reset password token: " + error.message);
+  }
+};
+
+const createResetPasswordTokenLink = async (userID) => {
+  try {
+    let token = createRandomToken();
+    await resetPasswordTokenModel.findOneAndDelete({ userID });
+
+    let newToken = new resetPasswordTokenModel({ userID, token });
+    newToken.save();
+
+    let tokenLink =
+      process.env.SYSTEM_ENV == "development"
+        ? `http://localhost:5000/api/v1/auth/reset-password/${token}`
+        : `https://code-duniya.onrender.com/api/v1/auth/reset-password/${token}`;
+
+    return tokenLink;
+  } catch (error) {
+    throw new Error(
+      "Error creating reset password token link: " + error.message
+    );
+  }
+};
+
+const clearResetPasswordToken = async (id) => {
+  try {
+    await resetPasswordTokenModel.findOneAndDelete({ _id: id });
+  } catch (error) {
+    throw new Error("Error clearing reset password token: " + error.message);
+  }
+};
+
 const clearTokenSchema = async (userID) => {
   try {
     await emailVerifyTokenModel.findOneAndDelete({ userID });
@@ -290,6 +330,9 @@ module.exports = {
   saveVerificationToken,
   validateVerificationToken,
   findUserAndUpdateEmailVerification,
+  findResetPasswordToken,
+  createResetPasswordTokenLink,
+  clearResetPasswordToken,
   clearTokenSchema,
   createEmailLink,
   hashedPassword,

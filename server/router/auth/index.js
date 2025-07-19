@@ -7,6 +7,9 @@ const {
   verifyEmailToken,
   editProfile,
   changePassword,
+  verifyResetPasswordToken,
+  sendResetPasswordToken,
+  resetPassword,
 } = require("../../controller/auth.controller");
 const createUploadMiddleware = require("../../middlewares/fileUpload");
 const verifyAuthentication = require("../../middlewares/middleware");
@@ -49,6 +52,24 @@ router.patch(
  * https://localhost:5000/api/v1/auth/update-password
  */
 router.patch("/auth/update-password", verifyAuthentication, changePassword);
+
+/**
+ * Reset password link route
+ * https://localhost:5000/api/v1/auth/reset-password
+ */
+router.post("/auth/reset-password", sendResetPasswordToken);
+
+/**
+ * Verify reset password token route
+ * https://localhost:5000/api/v1/auth/reset-password-verify
+ */
+router.get("/auth/reset-password-verify/:token", verifyResetPasswordToken);
+
+/**
+ * Password reset route
+ * https://localhost:5000/api/v1/auth/reset-password/:token
+ */
+router.post("/auth/reset-password/:token", resetPassword);
 
 /**
  * Send email verification token route

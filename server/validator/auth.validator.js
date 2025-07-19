@@ -52,6 +52,16 @@ const changePasswordValidator = z
     path: ["confirmPassword"],
   });
 
+const resetPasswordValidator = z
+  .object({
+    newPassword: passwordValidator,
+    confirmPassword: passwordValidator,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 module.exports = {
   nameValidator,
   emailValidator,
@@ -61,4 +71,5 @@ module.exports = {
   loginValidator,
   registrationValidator,
   changePasswordValidator,
+  resetPasswordValidator,
 };
