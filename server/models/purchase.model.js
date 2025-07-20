@@ -14,7 +14,7 @@ const purchaseSchema = new mongoose.Schema(
     },
     isApproved: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     courseCompleted: {
       type: Boolean,

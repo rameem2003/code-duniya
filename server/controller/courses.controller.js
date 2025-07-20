@@ -1,9 +1,11 @@
+const { findUserById } = require("../services/auth.service");
 const {
   getAllCourses,
   uploadCourse,
   courseDelete,
   courseUpdate,
   findCourseById,
+  coursePurchase,
 } = require("../services/courses.service");
 
 /**
@@ -132,10 +134,56 @@ const deleteCourse = async (req, res) => {
   }
 };
 
+/**
+ * Course purchase controller
+ */
+const purchaseCourse = async (req, res) => {
+  const { courseId } = req.body;
+  if (!req.user) {
+    return res.status(401).send({
+      success: false,
+      msg: "Unauthorized access",
+    });
+  }
+
+  let user = await findUserById(req.user.id);
+
+  if (!user) {
+    return res.status(404).send({
+      success: false,
+      msg: "User not found",
+    });
+  }
+
+  let courseExists = await findCourseById(courseId);
+  if (!courseExists) {
+    return res.status(404).send({
+      success: false,
+      msg: "Course not found",
+    });
+  }
+
+  try {
+    let url = await coursePurchase(user, courseExists);
+    res.status(201).send({
+      success: true,
+      msg: "Course purchased successfully",
+      url,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      msg: "Error processing purchase",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   allCourses,
   getSingleCourse,
   createCourse,
   updateCourse,
   deleteCourse,
+  purchaseCourse,
 };

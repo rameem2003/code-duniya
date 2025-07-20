@@ -5,6 +5,7 @@ const {
   deleteCourse,
   updateCourse,
   getSingleCourse,
+  purchaseCourse,
 } = require("../../controller/courses.controller");
 const createUploadMiddleware = require("../../middlewares/fileUpload");
 const verifyAuthentication = require("../../middlewares/middleware");
@@ -49,5 +50,11 @@ router.put(
  * https://localhost:5000/api/v1/courses/delete/:id
  */
 router.delete("/courses/delete/:id", verifyAuthentication, deleteCourse);
+
+/**
+ * Course purchase route
+ * https://localhost:5000/api/v1/courses/purchase
+ */
+router.post("/courses/purchase", verifyAuthentication, purchaseCourse);
 
 module.exports = router;

@@ -1,7 +1,9 @@
 const deleteFile = require("../lib/deleteFile");
+const sslcz = require("../lib/paymentGateway");
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
 const { thumbImageGenerator } = require("./common.service");
+const { addToPurchase } = require("./purchase.service");
 
 const findCourseById = async (id) => {
   try {
@@ -107,10 +109,53 @@ const courseDelete = async (id) => {
   }
 };
 
+const coursePurchase = async (userData, courseData) => {
+  try {
+    const order = await addToPurchase(userData._id, courseData._id);
+    const data = {
+      total_amount: 20000,
+      currency: "BDT",
+      tran_id: "transactionID", // use unique tran_id for each api call
+      success_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
+      fail_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/fail/${order._id}`,
+      cancel_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/cancel/${order._id}`,
+      ipn_url: "http://localhost:3030/ipn",
+      shipping_method: "Courier",
+      product_name: "Computer.",
+      product_category: "Electronic",
+      product_profile: "general",
+      cus_name: "Customer Name",
+      cus_email: "customer@example.com",
+      cus_add1: "address",
+      cus_add2: "address",
+      cus_city: "city",
+      cus_state: "city",
+      cus_postcode: "1000",
+      cus_country: "Bangladesh",
+      cus_phone: "phone",
+      cus_fax: "phone",
+      ship_name: "Customer Name",
+      ship_add1: "address",
+      ship_add2: "address",
+      ship_city: "city",
+      ship_state: "city",
+      ship_postcode: 1000,
+      ship_country: "Bangladesh",
+    };
+
+    const response = await sslcz.init(data);
+
+    return response.GatewayPageURL;
+  } catch (error) {
+    throw new Error("Error processing course purchase: " + error.message);
+  }
+};
+
 module.exports = {
   findCourseById,
   getAllCourses,
   uploadCourse,
   courseUpdate,
   courseDelete,
+  coursePurchase,
 };
