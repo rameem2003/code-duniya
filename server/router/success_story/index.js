@@ -4,6 +4,7 @@ const {
   allSuccessStories,
 } = require("../../controller/successStory.controller");
 const createUploadMiddleware = require("../../middlewares/fileUpload");
+const verifyAuthentication = require("../../middlewares/middleware");
 
 const router = require("express").Router();
 
@@ -23,6 +24,7 @@ router.get("/successstory/", allSuccessStories);
 
 router.post(
   "/successstory/create",
+  verifyAuthentication,
   uploadThumb.single("thumb"),
   createSuccessStory
 );
@@ -32,6 +34,6 @@ router.post(
  * https://localhost:5000/api/v1/successstory/delete/:id
  */
 
-router.delete("/successstory/delete/:id", deleteStory);
+router.delete("/successstory/delete/:id", verifyAuthentication, deleteStory);
 
 module.exports = router;

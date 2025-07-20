@@ -14,7 +14,7 @@ const upload = createUploadMiddleware({ type: "thumb" });
  * All Course Route
  * https://localhost:5000/api/v1/courses/
  */
-router.get("/courses/", verifyAuthentication, allCourses);
+router.get("/courses/", allCourses);
 
 /**
  * Get single course controller
@@ -26,18 +26,28 @@ router.get("/courses/:id", getSingleCourse);
  * Create Course Route
  * https://localhost:5000/api/v1/courses/create
  */
-router.post("/courses/create", upload.single("thumb"), createCourse);
+router.post(
+  "/courses/create",
+  verifyAuthentication,
+  upload.single("thumb"),
+  createCourse
+);
 
 /**
  * Update Course Route
  * https://localhost:5000/api/v1/courses/update/:id
  */
-router.put("/courses/update/:id", upload.single("thumb"), updateCourse);
+router.put(
+  "/courses/update/:id",
+  verifyAuthentication,
+  upload.single("thumb"),
+  updateCourse
+);
 
 /**
  * Course Delete Route
  * https://localhost:5000/api/v1/courses/delete/:id
  */
-router.delete("/courses/delete/:id", deleteCourse);
+router.delete("/courses/delete/:id", verifyAuthentication, deleteCourse);
 
 module.exports = router;
