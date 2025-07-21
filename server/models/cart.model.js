@@ -2,17 +2,15 @@ const { default: mongoose } = require("mongoose");
 
 const cartSchema = new mongoose.Schema(
   {
-    userID: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    courses: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+    },
   },
   {
     timestamps: true,
