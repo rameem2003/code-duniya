@@ -1,4 +1,5 @@
 const { findUserById } = require("../services/auth.service");
+const { findCartByUserId } = require("../services/cart.service");
 const {
   getAllCourses,
   uploadCourse,
@@ -155,16 +156,26 @@ const purchaseCourse = async (req, res) => {
     });
   }
 
-  let courseExists = await findCourseById(courseId);
-  if (!courseExists) {
-    return res.status(404).send({
-      success: false,
-      msg: "Course not found",
-    });
-  }
+  let cartData = await findCartByUserId(user._id);
+  cartData.map(async (item) => {
+    let courseExists = await findCourseById(item.course._id);
+    if (!courseExists) {
+      console.log("Course not found in cart:", item.course._id);
+      return res.status(404).send({
+        success: false,
+        msg: "Course not found",
+      });
+    }
+  });
+
+  let grandTotal = cartData.reduce((total, item) => {
+    return total + item.course.sellingPrice;
+  }, 0);
+
+  console.log("Grand Total:", grandTotal);
 
   try {
-    let url = await coursePurchase(user, courseExists);
+    let url = await coursePurchase(user, cartData, grandTotal);
     res.status(201).send({
       success: true,
       msg: "Course purchased successfully",

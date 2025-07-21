@@ -109,11 +109,11 @@ const courseDelete = async (id) => {
   }
 };
 
-const coursePurchase = async (userData, courseData) => {
+const coursePurchase = async (userData, cartData, grandTotal) => {
   try {
     const order = await addToPurchase(userData._id, courseData._id);
     const data = {
-      total_amount: 20000,
+      total_amount: grandTotal, // Amount in Taka
       currency: "BDT",
       tran_id: "transactionID", // use unique tran_id for each api call
       success_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
