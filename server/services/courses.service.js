@@ -111,7 +111,7 @@ const courseDelete = async (id) => {
 
 const coursePurchase = async (userData, cartData, grandTotal) => {
   try {
-    const order = await addToPurchase(userData._id, courseData._id);
+    const order = await addToPurchase(userData._id, cartData.course._id);
     const data = {
       total_amount: grandTotal, // Amount in Taka
       currency: "BDT",
@@ -143,7 +143,7 @@ const coursePurchase = async (userData, cartData, grandTotal) => {
       ship_country: "Bangladesh",
     };
 
-    const response = await sslcz.init(data);
+    let response = await sslcz.init(data);
 
     return response.GatewayPageURL;
   } catch (error) {

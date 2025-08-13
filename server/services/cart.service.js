@@ -11,7 +11,7 @@ const checkCourseInCart = async (userId, courseId) => {
 
 const findCartByUserId = async (userId) => {
   try {
-    let data = await cartModel.find({ userId }).populate("course");
+    let data = await cartModel.findOne({ userId }).populate("course");
     return data;
   } catch (error) {
     throw new Error("Error fetching cart by user ID: " + error.message);
