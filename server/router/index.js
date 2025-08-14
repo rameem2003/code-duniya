@@ -3,6 +3,7 @@ const router = require("express").Router();
 const auth = require("./auth");
 const cart = require("./cart");
 const courses = require("./course");
+const purchase = require("./purchase");
 const categories = require("./category");
 const successStory = require("./success_story");
 const api_base = process.env.API_VERSION_BASE || "/api/v1";
@@ -24,6 +25,12 @@ router.use(api_base, cart);
  * https://localhost:5000/api/v1/courses
  */
 router.use(api_base, courses);
+
+/**
+ * Purchase Routes
+ * https://localhost:5000/api/v1/order
+ */
+router.use(api_base, purchase);
 
 /**
  * Category Routes

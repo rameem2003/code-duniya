@@ -20,6 +20,8 @@ const findCartByUserId = async (userId) => {
 
 const setToCart = async (userId, courseId) => {
   try {
+    await removeUserCart(userId);
+
     let data = new cartModel({ userId, course: courseId });
     await data.save();
     return data;
@@ -37,9 +39,19 @@ const removeCartItem = async (id) => {
   }
 };
 
+const removeUserCart = async (userId) => {
+  try {
+    let data = await cartModel.deleteMany({ userId });
+    return data;
+  } catch (error) {
+    throw new Error("Error removing user cart: " + error.message);
+  }
+};
+
 module.exports = {
   checkCourseInCart,
   findCartByUserId,
   setToCart,
   removeCartItem,
+  removeUserCart,
 };

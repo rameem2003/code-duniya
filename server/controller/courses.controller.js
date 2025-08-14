@@ -8,6 +8,10 @@ const {
   findCourseById,
   coursePurchase,
 } = require("../services/courses.service");
+const {
+  updatePurchase,
+  deletePurchase,
+} = require("../services/purchase.service");
 
 /**
  * Get All Courses Controller
@@ -139,7 +143,6 @@ const deleteCourse = async (req, res) => {
  * Course purchase controller
  */
 const purchaseCourse = async (req, res) => {
-  const { courseId } = req.body;
   if (!req.user) {
     return res.status(401).send({
       success: false,
@@ -194,6 +197,66 @@ const purchaseCourse = async (req, res) => {
   }
 };
 
+const successPurchase = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await updatePurchase(id);
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Error processing purchase",
+      error: error.message,
+    });
+  }
+
+  if (process.env.SYSTEM_ENV === "production") {
+    return res.redirect(`${process.env.REMOTE_HOST_URL}/payment/success/${id}`);
+  } else {
+    return res.redirect(`http://localhost:5173/payment/success/${id}`);
+  }
+};
+
+const failPurchase = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await deletePurchase(id);
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Error processing purchase",
+      error: error.message,
+    });
+  }
+
+  if (process.env.SYSTEM_ENV === "production") {
+    return res.redirect(`${process.env.REMOTE_HOST_URL}/payment/failed/${id}`);
+  } else {
+    return res.redirect(`http://localhost:5173/payment/failed/${id}`);
+  }
+};
+
+const cancelPurchase = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await deletePurchase(id);
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Error processing purchase",
+      error: error.message,
+    });
+  }
+
+  if (process.env.SYSTEM_ENV === "production") {
+    return res.redirect(`${process.env.REMOTE_HOST_URL}/payment/cancel/${id}`);
+  } else {
+    return res.redirect(`http://localhost:5173/payment/cancel/${id}`);
+  }
+};
+
 module.exports = {
   allCourses,
   getSingleCourse,
@@ -201,4 +264,7 @@ module.exports = {
   updateCourse,
   deleteCourse,
   purchaseCourse,
+  successPurchase,
+  failPurchase,
+  cancelPurchase,
 };

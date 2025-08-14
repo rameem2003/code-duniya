@@ -116,9 +116,9 @@ const coursePurchase = async (userData, cartData, grandTotal) => {
       total_amount: grandTotal, // Amount in Taka
       currency: "BDT",
       tran_id: "transactionID", // use unique tran_id for each api call
-      success_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
-      fail_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/fail/${order._id}`,
-      cancel_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/cancel/${order._id}`,
+      success_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.API_VERSION_BASE}/order/success/${order._id}`,
+      fail_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.API_VERSION_BASE}/order/fail/${order._id}`,
+      cancel_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.API_VERSION_BASE}/order/cancel/${order._id}`,
       ipn_url: "http://localhost:3030/ipn",
       shipping_method: "Courier",
       product_name: "Code Duniya Course.",
