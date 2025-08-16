@@ -77,6 +77,7 @@ const getUserProfile = async (req, res) => {
         .status(400)
         .send({ success: false, message: "User not found" });
     }
+    console.log(user);
 
     return res.status(200).send({
       success: true,

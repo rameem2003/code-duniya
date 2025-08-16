@@ -1,5 +1,9 @@
+const sendEmail = require("../lib/sendEmail");
 const { findUserById } = require("../services/auth.service");
-const { findCartByUserId } = require("../services/cart.service");
+const {
+  findCartByUserId,
+  removeUserCart,
+} = require("../services/cart.service");
 const {
   getAllCourses,
   uploadCourse,
@@ -7,10 +11,12 @@ const {
   courseUpdate,
   findCourseById,
   coursePurchase,
+  pushNewPurchaseCourse,
 } = require("../services/courses.service");
 const {
   updatePurchase,
   deletePurchase,
+  findPurchaseById,
 } = require("../services/purchase.service");
 
 /**
@@ -183,6 +189,8 @@ const purchaseCourse = async (req, res) => {
       cartData,
       cartData.course.sellingPrice
     );
+
+    await removeUserCart(req.user.id);
     res.status(201).send({
       success: true,
       msg: "Course purchased successfully",
@@ -202,6 +210,14 @@ const successPurchase = async (req, res) => {
 
   try {
     await updatePurchase(id);
+    let data = await findPurchaseById(id);
+    console.log(data);
+    await pushNewPurchaseCourse(data.userId._id, data.course._id);
+
+    // send confirmation email
+    let html = `<p>Hi ${data.userId.name},</p>
+    <h1>Course purchased successfully</h1> <p>Course: ${data.course.title}</p>`;
+    await sendEmail(data.userId.email, "Course purchased successfully", html);
   } catch (error) {
     res.status(500).send({
       success: false,

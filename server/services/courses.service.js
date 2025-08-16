@@ -2,6 +2,7 @@ const deleteFile = require("../lib/deleteFile");
 const sslcz = require("../lib/paymentGateway");
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
+const userModel = require("../models/user.model");
 const { thumbImageGenerator } = require("./common.service");
 const { addToPurchase } = require("./purchase.service");
 
@@ -22,7 +23,8 @@ const getAllCourses = async () => {
     let res = await courseModel
       .find()
       .populate("category")
-      .populate("successStories");
+      .populate("successStories")
+      .populate("users");
     return res;
   } catch (error) {
     throw new Error("Error fetching courses: " + error.message);
@@ -151,6 +153,24 @@ const coursePurchase = async (userData, cartData, grandTotal) => {
   }
 };
 
+const pushNewPurchaseCourse = async (userId, courseId) => {
+  try {
+    await userModel.findOneAndUpdate(
+      { _id: userId },
+      { $push: { courses: courseId } },
+      { new: true }
+    );
+
+    await courseModel.findOneAndUpdate(
+      { _id: courseId },
+      { $push: { users: userId } },
+      { new: true }
+    );
+  } catch (error) {
+    throw new Error("Error pushing new purchase course: " + error.message);
+  }
+};
+
 module.exports = {
   findCourseById,
   getAllCourses,
@@ -158,4 +178,5 @@ module.exports = {
   courseUpdate,
   courseDelete,
   coursePurchase,
+  pushNewPurchaseCourse,
 };

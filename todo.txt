@@ -1,0 +1,2 @@
+1. Coupon Model Setup.
+2. Coupon Check and update price before Course purchase 

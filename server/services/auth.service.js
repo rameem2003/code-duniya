@@ -14,7 +14,8 @@ const resetPasswordTokenModel = require("../models/resetPasswordToken.model");
 
 const findUserById = async (id) => {
   try {
-    let user = await userModel.findOne({ _id: id });
+    let user = await userModel.findOne({ _id: id }).populate("courses");
+
     return user;
   } catch (error) {
     throw new Error("Error finding user: " + error.message);
