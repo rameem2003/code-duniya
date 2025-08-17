@@ -3,8 +3,11 @@ const {
   checkCourseInCart,
   findCartByUserId,
   removeCartItem,
+  applyCouponAndUpdateCart,
 } = require("../services/cart.service");
+const { findCouponCode } = require("../services/coupon.service");
 const { findCourseById } = require("../services/courses.service");
+const { code } = require("../validator/coupon.validator");
 
 const getUserCart = async (req, res) => {
   if (!req.user) {
@@ -68,6 +71,51 @@ const addToCart = async (req, res) => {
   }
 };
 
+const applyCoupon = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Unauthorized user" });
+  }
+
+  let { data, error } = code.safeParse(req.body.code);
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  let coupon = await findCouponCode(data);
+  if (!coupon) {
+    return res.status(400).send({
+      success: false,
+      msg: "Invalid coupon code",
+    });
+  }
+  let codeExistToCart = await findCartByUserId(req.user.id);
+
+  if (codeExistToCart.coupon == coupon.code) {
+    return res.status(400).send({
+      success: false,
+      msg: "Coupon already applied",
+    });
+  }
+
+  try {
+    await applyCouponAndUpdateCart(req.user.id, coupon.code, coupon.discount);
+    return res.status(200).send({
+      success: true,
+      msg: "Coupon applied successfully",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      msg: "Error applying coupon",
+      error: error.message,
+    });
+  }
+};
+
 const deleteCartItem = async (req, res) => {
   const { id } = req.body;
   if (!req.user) {
@@ -91,4 +139,4 @@ const deleteCartItem = async (req, res) => {
   }
 };
 
-module.exports = { getUserCart, addToCart, deleteCartItem };
+module.exports = { getUserCart, addToCart, applyCoupon, deleteCartItem };

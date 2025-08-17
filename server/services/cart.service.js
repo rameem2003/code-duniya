@@ -30,6 +30,28 @@ const setToCart = async (userId, courseId) => {
   }
 };
 
+const applyCouponAndUpdateCart = async (userId, code, discount) => {
+  try {
+    let data = await findCartByUserId(userId);
+    let newData = await cartModel.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          coupon: code,
+          finalPrice:
+            data.course.discountedPrice > 0
+              ? data.course.discountedPrice - discount
+              : data.course.sellingPrice - discount,
+        },
+      },
+      { new: true }
+    );
+    return newData;
+  } catch (error) {
+    throw new Error("Error applying coupon to cart: " + error.message);
+  }
+};
+
 const removeCartItem = async (id) => {
   try {
     let data = await cartModel.deleteOne({ _id: id });
@@ -52,6 +74,7 @@ module.exports = {
   checkCourseInCart,
   findCartByUserId,
   setToCart,
+  applyCouponAndUpdateCart,
   removeCartItem,
   removeUserCart,
 };

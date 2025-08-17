@@ -6,6 +6,7 @@ const courses = require("./course");
 const purchase = require("./purchase");
 const categories = require("./category");
 const successStory = require("./success_story");
+const coupon = require("./coupon");
 const api_base = process.env.API_VERSION_BASE || "/api/v1";
 
 /**
@@ -43,5 +44,11 @@ router.use(api_base, categories);
  * https://localhost:5000/api/v1/successstory
  */
 router.use(api_base, successStory);
+
+/**
+ * Coupon Routes
+ * https://localhost:5000/api/v1/coupon
+ */
+router.use(api_base, coupon);
 
 module.exports = router;

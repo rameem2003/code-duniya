@@ -11,6 +11,14 @@ const cartSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
+    coupon: {
+      type: String,
+      default: "",
+    },
+    finalPrice: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
