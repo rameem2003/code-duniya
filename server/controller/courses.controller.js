@@ -166,29 +166,22 @@ const purchaseCourse = async (req, res) => {
   }
 
   let cartData = await findCartByUserId(user._id);
-  // cartData.map(async (item) => {
-  //   let courseExists = await findCourseById(item.course._id);
-  //   if (!courseExists) {
-  //     console.log("Course not found in cart:", item.course._id);
-  //     return res.status(404).send({
-  //       success: false,
-  //       msg: "Course not found",
-  //     });
-  //   }
-  // });
 
-  // let grandTotal = cartData.reduce((total, item) => {
-  //   return total + item.course.sellingPrice;
-  // }, 0);
+  if (!cartData) {
+    return res.status(404).send({
+      success: false,
+      msg: "Cart not found",
+    });
+  }
 
-  // console.log("Grand Total:", grandTotal);
+  let finalCoursePrice = cartData.coupon
+    ? cartData.finalPrice
+    : cartData.course.sellingPrice
+    ? cartData.course.sellingPrice
+    : cartData.course.discountedPrice;
 
   try {
-    let url = await coursePurchase(
-      user,
-      cartData,
-      cartData.course.sellingPrice
-    );
+    let url = await coursePurchase(user, cartData, finalCoursePrice);
 
     await removeUserCart(req.user.id);
     res.status(201).send({
@@ -215,8 +208,42 @@ const successPurchase = async (req, res) => {
     await pushNewPurchaseCourse(data.userId._id, data.course._id);
 
     // send confirmation email
-    let html = `<p>Hi ${data.userId.name},</p>
-    <h1>Course purchased successfully</h1> <p>Course: ${data.course.title}</p>`;
+    let html = `
+  <p>Hi ${data.userId.name},</p>
+  <h1>Course purchased successfully 🎉</h1>
+  <p><strong>Course:</strong> ${data.course.title}</p>
+
+  <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%; max-width: 500px;">
+    <tr>
+      <th align="left">Item</th>
+      <th align="left">Details</th>
+    </tr>
+    <tr>
+      <td>Price</td>
+      <td>BDT ${
+        data.course.sellingPrice
+          ? data.course.sellingPrice
+          : data.course.discountedPrice
+      }</td>
+    </tr>
+    <tr>
+      <td>Discount</td>
+      <td>BDT (-) ${data.discount}</td>
+    </tr>
+    <tr>
+      <td>Coupon Code</td>
+      <td>${data.coupon ? data.coupon : "N/A"}</td>
+    </tr>
+    <tr>
+      <td><strong>Grand Total</strong></td>
+      <td><strong>BDT ${data.finalPrice}</strong></td>
+    </tr>
+  </table>
+
+  <br/>
+  <p>Thank you for your purchase! 🚀</p>
+`;
+
     await sendEmail(data.userId.email, "Course purchased successfully", html);
   } catch (error) {
     res.status(500).send({

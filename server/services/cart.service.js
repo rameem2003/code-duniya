@@ -38,6 +38,7 @@ const applyCouponAndUpdateCart = async (userId, code, discount) => {
       {
         $set: {
           coupon: code,
+          discount,
           finalPrice:
             data.course.discountedPrice > 0
               ? data.course.discountedPrice - discount

@@ -24,9 +24,21 @@ const findPurchasesByUserId = async (userId) => {
   }
 };
 
-const addToPurchase = async (userId, courseId) => {
+const addToPurchase = async (
+  userId,
+  courseId,
+  coupon,
+  discount,
+  finalPrice
+) => {
   try {
-    let data = new purchaseModel({ userId, course: courseId });
+    let data = new purchaseModel({
+      userId,
+      course: courseId,
+      coupon,
+      discount,
+      finalPrice,
+    });
     await data.save();
 
     return data;

@@ -24,6 +24,18 @@ const purchaseSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    coupon: {
+      type: String,
+      default: "",
+    },
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    finalPrice: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
