@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anek_Bangla, Poppins } from "next/font/google";
 import "./globals.css";
 import Navber from "@/components/shared/Navber";
+import Footer from "@/components/shared/Footer";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -62,10 +63,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${anekBangla.variable} ${poppins.variable} antialiased `}
+        className={`${anekBangla.variable} ${poppins.variable} antialiased`}
       >
         <Navber />
         {children}
+        <Footer />
       </body>
     </html>
   );

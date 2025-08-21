@@ -72,8 +72,8 @@ const CourseCategory = () => {
               </div>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious className="hidden lg:flex" />
-          <CarouselNext className="hidden lg:flex" />
+          <CarouselPrevious className="hidden xl:flex" />
+          <CarouselNext className="hidden xl:flex" />
         </Carousel>
       </Container>
     </div>
