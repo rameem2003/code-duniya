@@ -5,7 +5,7 @@ import CourseCategory from "./CourseCategory";
 
 const Banner = () => {
   return (
-    <div className=" bg-cd-primary py-[120px]">
+    <div className=" bg-cd-primary py-[90px] 2xl:py-[120px]">
       <Container>
         {/* header */}
         <section className=" relative">

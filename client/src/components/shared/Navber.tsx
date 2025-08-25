@@ -36,12 +36,12 @@ const Navber = () => {
 
           {/* nav links */}
           <ul className="items-center gap-[20px] text-[1rem] text-[#424242] md:flex hidden">
-            <li className=" font-cd-bangla text-[24px] font-semibold text-white">
+            <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
               <Link href="/">হোম</Link>
             </li>
             {/* product megamenu */}
             <li
-              className=" font-cd-bangla text-[24px] font-semibold text-white"
+              className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white"
               onMouseEnter={() => setIsProductHover(true)}
               onMouseLeave={() => setIsProductHover(false)}
             >
@@ -232,10 +232,10 @@ const Navber = () => {
               </div>
             </li>
 
-            <li className=" font-cd-bangla text-[24px] font-semibold text-white">
+            <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
               যোগাযোগ
             </li>
-            <li className=" font-cd-bangla text-[24px] font-semibold text-white">
+            <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
               ক্যারিয়ার গাইডলাইন
             </li>
           </ul>

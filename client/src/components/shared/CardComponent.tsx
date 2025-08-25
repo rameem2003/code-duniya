@@ -44,7 +44,7 @@ const CardComponent = () => {
           </p>
 
           <Link
-            href={"/courses/ui-ux-design"}
+            href={"/course/ui-ux-design"}
             className=" font-cd-bangla px-[22px] bg-cd-primary rounded-[15px] py-2 text-[20px] font-semibold text-white"
           >
             বিস্তারিত
