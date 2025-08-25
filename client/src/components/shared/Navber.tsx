@@ -37,7 +37,7 @@ const Navber = () => {
           {/* nav links */}
           <ul className="items-center gap-[20px] text-[1rem] text-[#424242] md:flex hidden">
             <li className=" font-cd-bangla text-[24px] font-semibold text-white">
-              হোম
+              <Link href="/">হোম</Link>
             </li>
             {/* product megamenu */}
             <li
@@ -45,7 +45,7 @@ const Navber = () => {
               onMouseEnter={() => setIsProductHover(true)}
               onMouseLeave={() => setIsProductHover(false)}
             >
-              কোর্সসমুহ
+              <Link href="/our-courses">কোর্সসমুহ</Link>
               {/* mega menu */}
               <div
                 className={`hidden ${

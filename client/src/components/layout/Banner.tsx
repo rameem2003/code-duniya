@@ -39,7 +39,9 @@ const Banner = () => {
             </div>
           </header>
 
-          <CourseCategory />
+          <div className="absolute bottom-[-200px] left-0 right-0">
+            <CourseCategory />
+          </div>
         </section>
       </Container>
     </div>

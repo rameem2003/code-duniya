@@ -9,10 +9,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Container from "./Container";
+import Link from "next/link";
 
 const CourseCategory = () => {
   return (
-    <div className=" absolute bottom-[-200px] left-0 right-0">
+    <div className=" w-full">
       <Container>
         <Carousel
           opts={{
@@ -26,51 +27,23 @@ const CourseCategory = () => {
           ]}
         >
           <CarouselContent className=" mx-0 lg:mx-6">
-            <CarouselItem className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4">
-              <div className=" py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center">
-                <img src="/icon.png" alt="" className=" mx-auto" />
+            {Array.from({ length: 8 }).map((_, index) => (
+              <CarouselItem
+                key={index}
+                className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4"
+              >
+                <Link
+                  href={"/department/graphics"}
+                  className=" block py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center"
+                >
+                  <img src="/icon.png" alt="" className=" mx-auto" />
 
-                <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
-                  গ্রাফিকস
-                </h4>
-              </div>
-            </CarouselItem>
-            <CarouselItem className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4">
-              <div className=" py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center">
-                <img src="/icon.png" alt="" className=" mx-auto" />
-
-                <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
-                  গ্রাফিকস
-                </h4>
-              </div>
-            </CarouselItem>
-            <CarouselItem className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4">
-              <div className=" py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center">
-                <img src="/icon.png" alt="" className=" mx-auto" />
-
-                <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
-                  গ্রাফিকস
-                </h4>
-              </div>
-            </CarouselItem>
-            <CarouselItem className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4">
-              <div className=" py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center">
-                <img src="/icon.png" alt="" className=" mx-auto" />
-
-                <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
-                  গ্রাফিকস
-                </h4>
-              </div>
-            </CarouselItem>
-            <CarouselItem className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4">
-              <div className=" py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center">
-                <img src="/icon.png" alt="" className=" mx-auto" />
-
-                <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
-                  গ্রাফিকস
-                </h4>
-              </div>
-            </CarouselItem>
+                  <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
+                    গ্রাফিকস
+                  </h4>
+                </Link>
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious className="hidden xl:flex" />
           <CarouselNext className="hidden xl:flex" />

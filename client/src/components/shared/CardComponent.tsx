@@ -13,7 +13,7 @@ import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 const CardComponent = () => {
   return (
-    <Card className=" gap-0 rounded-[15px] basis-full sm:basis-1/2 md:basis-1/2 p-0 bg-red-300">
+    <Card className=" gap-0 rounded-[15px] basis-full sm:basis-1/2 lg:basis-1/3 mb-2 p-0 ">
       <CardContent className=" p-0 m-0">
         <Image
           src="/banner.jpg"
