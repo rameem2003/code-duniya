@@ -26,7 +26,7 @@ const Navber = () => {
   const [isMegaMenuCollapse, setIsMegaMenuCollapse] = useState(false);
   const [megaMenuSubItemsOpen, setMegaMenuSubItemsOpen] = useState("");
   return (
-    <nav className=" bg-cd-primary p-4 fixed top-0 left-0 w-full z-[100]">
+    <nav className=" bg-cd-primary p-4 fixed top-0 left-0 w-full z-[10000000000]">
       <Container>
         <div className="flex items-center justify-between w-full z-[100000] relative ">
           {/* logo */}
@@ -38,6 +38,9 @@ const Navber = () => {
           <ul className="items-center gap-[20px] text-[1rem] text-[#424242] md:flex hidden">
             <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
               <Link href="/">হোম</Link>
+            </li>
+            <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
+              <Link href="/about">আমাদের সম্পর্কে</Link>
             </li>
             {/* product megamenu */}
             <li
@@ -233,10 +236,10 @@ const Navber = () => {
             </li>
 
             <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
-              যোগাযোগ
+              <Link href="/success-story">সফলতার গল্প</Link>
             </li>
             <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
-              ক্যারিয়ার গাইডলাইন
+              <Link href="/contact">যোগাযোগ</Link>
             </li>
           </ul>
 

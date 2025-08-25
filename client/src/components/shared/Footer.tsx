@@ -14,7 +14,7 @@ import { BsTwitterX } from "react-icons/bs";
 
 const Footer = () => {
   return (
-    <footer className=" bg-cd-primary py-5">
+    <footer className=" bg-cd-primary py-5 relative z-[1000]">
       <Container>
         <h2 className=" font-cd-bangla font-bold text-5xl lg:text-[80px] text-white text-center">
           ভর্তি চলছে
