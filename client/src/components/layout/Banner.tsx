@@ -21,7 +21,7 @@ const Banner = () => {
 
               <div className="flex items-center flex-wrap gap-[20px] mt-6">
                 <Link
-                  href="/"
+                  href="/our-courses"
                   className=" mx-auto lg:mx-0 font-cd-bangla text-white text-[24px] font-semibold bg-[#415A77] py-1 px-14 rounded-[10px]"
                 >
                   কোর্স দেখুন

@@ -65,6 +65,10 @@ export default function RootLayout({
       <body
         className={`${anekBangla.variable} ${poppins.variable} antialiased`}
       >
+        <aside>
+          {" "}
+          <p className="font-cd-poppins">Side bar </p>
+        </aside>
         {children}
       </body>
     </html>

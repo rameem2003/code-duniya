@@ -4,9 +4,12 @@ const successStoryModel = require("../models/successStory.model");
 const userModel = require("../models/user.model");
 const { thumbImageGenerator } = require("./common.service");
 
-const findAllStories = async () => {
+const findAllStories = async (limit) => {
   try {
-    return await successStoryModel.find().sort({ createdAt: -1 });
+    return await successStoryModel
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(limit || 0);
   } catch (error) {
     throw new Error("Error getting all stories: " + error.message);
   }

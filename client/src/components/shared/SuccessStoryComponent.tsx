@@ -1,33 +1,46 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import ReactPlayer from "react-player";
 import { FaTimes } from "react-icons/fa";
+import { allSuccessStories } from "@/lib/successStoryApi";
+import { successStoryType } from "@/types/type";
 
 interface playProps {
   state?: boolean;
   video?: string;
 }
 
-const SuccessStoryComponent = () => {
+const SuccessStoryComponent = ({ videoLimit = 4 }: { videoLimit?: number }) => {
+  const [stories, setStories] = useState<successStoryType[]>([]);
   const [play, setPlay] = useState<playProps>({});
+
+  const fetchSuccessStories = async () => {
+    let res = await allSuccessStories(videoLimit);
+    console.log(res);
+    setStories(res.data);
+  };
+
+  useEffect(() => {
+    fetchSuccessStories();
+  }, []);
   return (
     <>
       <div className=" flex items-center justify-between gap-6 flex-wrap">
-        {Array.from({ length: 4 }).map((_, index) => (
+        {stories.map((story, index) => (
           <Card
             onClick={() =>
               setPlay({
                 state: true,
-                video: "https://youtu.be/XMJLxuff210?si=V31GXNzuLfb1XA2H",
+                video: story.video,
               })
             }
             key={index}
             className="w-full p-0 lg:w-[48%] relative cursor-pointer overflow-hidden"
           >
             <Image
-              src="/banner.jpg"
+              src={story.thumb}
               alt="banner"
               width={500}
               height={500}

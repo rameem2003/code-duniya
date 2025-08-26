@@ -65,7 +65,9 @@ export default function RootLayout({
       <body
         className={`${anekBangla.variable} ${poppins.variable} antialiased`}
       >
+        <Navber />
         {children}
+        <Footer />
       </body>
     </html>
   );

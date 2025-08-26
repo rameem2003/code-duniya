@@ -7,8 +7,36 @@ import { FaFire } from "react-icons/fa";
 
 import PriceComponent from "./PriceComponent";
 import CourseSuccessStoryComponent from "./CourseSuccessStoryComponent";
+import Advertisement from "@/components/shared/Advertisement";
+import { Metadata, ResolvingMetadata } from "next";
+import { singleCourse } from "@/lib/courseApi";
+import { courseType, PageProps } from "./../../../types/type";
 
-const page = () => {
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = (await params).id;
+  // fetch post information
+  const post = await singleCourse(id).then((res) => res.data);
+
+  return {
+    title: post.title + " | কোর্স ডিটেইলস | কোড দুনিয়া",
+    description: post.description,
+  };
+}
+
+const page = async ({ params }: PageProps) => {
+  let id = await params.id;
+  let data = await singleCourse(id);
+  let course: courseType = data.data;
+  console.log(course);
+
   const services = [
     {
       title: "লাইভ ক্লাস",
@@ -49,7 +77,7 @@ const page = () => {
   return (
     <main className=" py-[120px]  ">
       <Container>
-        <section className=" flex items-start justify-center gap-5 flex-col lg:flex-row">
+        <section className=" mb-20 flex items-start justify-center gap-5 flex-col lg:flex-row">
           <div className="w-full lg:w-1/2 xl:h-7/12">
             <div className="px-4 py-1.5 bg-red-700/20  text-red-700 rounded-full text-[0.9rem] font-[500] inline-flex items-center gap-1">
               <FaFire className="text-[1rem] text-red-700" />
@@ -57,7 +85,7 @@ const page = () => {
             </div>
             <div className=" mt-2">
               <h2 className=" font-cd-poppins text-4xl font-bold text-cd-primary">
-                UX/UI Design
+                {course.title}
               </h2>
 
               <p className=" mt-5 text-gray-600 font-medium text-base leading-7 font-cd-bangla">
@@ -74,7 +102,7 @@ const page = () => {
               </p>
 
               <Link
-                href=""
+                href={`/enroll/${course._id}`}
                 className=" inline-block font-cd-bangla font-bold text-[20px] text-white py-2 px-4 rounded-[15px] bg-cd-primary hover:bg-[#020911] mt-5"
               >
                 কোর্স এনরোল করুন আজই
@@ -84,7 +112,7 @@ const page = () => {
 
           <div className="w-full lg:w-1/2 xl:h-5/12">
             <Image
-              src="/banner.jpg"
+              src={course.thumb}
               alt="course"
               width={500}
               height={500}
@@ -92,6 +120,8 @@ const page = () => {
             />
           </div>
         </section>
+
+        <Advertisement />
 
         <section className=" mt-20">
           <div className=" flex items-start justify-start gap-6 flex-col lg:flex-row">
@@ -143,8 +173,8 @@ const page = () => {
               </div>
             </div>
             <div className="w-full lg:w-1/2 xl:w-5/12 relative">
-              <CourseSuccessStoryComponent />
-              <PriceComponent />
+              <CourseSuccessStoryComponent story={course.successStories} />
+              <PriceComponent data={course} />
             </div>
           </div>
         </section>

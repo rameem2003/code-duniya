@@ -5,6 +5,7 @@ import CourseComponent from "@/components/shared/CourseComponent";
 import { allCategories, allCourses } from "@/lib/courseApi";
 import { Metadata } from "next";
 import { categoryType } from "@/types/type";
+import Advertisement from "@/components/shared/Advertisement";
 
 export const metadata: Metadata = {
   title: "আমাদের কোর্সসমুহ || কোড দুনিয়া",
@@ -18,17 +19,19 @@ const page = async () => {
   return (
     <main className="py-[100px]">
       <Container>
-        <h1 className="text-5xl font-bold font-cd-poppins  text-cd-primary">
-          Our Courses
+        <Advertisement />
+        <h1 className="text-5xl font-bold font-cd-bangla  text-cd-primary">
+          আমাদের কোর্সসমুহ
         </h1>
         {/* descriptions */}
-        <p className="mt-4 font-semibold w-full lg:w-[700px]  text-lg text-gray-600">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint aperiam
-          dolores repudiandae quaerat vel excepturi totam laudantium,
-          perspiciatis illo veritatis expedita, natus omnis tempora ut
-          accusantium est, voluptatibus modi eum distinctio fugit minus. Dolore
-          nihil itaque excepturi possimus! Ab delectus deleniti facilis omnis
-          assumenda excepturi nostrum esse libero voluptas itaque!
+        <p className="mt-4 font-medium font-cd-bangla w-full lg:w-[700px]  text-lg text-gray-600">
+          আমরা বিশ্ববাজারে চাহিদা অনুযায়ী সকল ট্রেন্ডি কোর্স অফার করি। এছাড়াও,
+          আপনি ল্যাব সুবিধা পাচ্ছেন যেখানে প্রয়োজনীয় কনফিগারেশন সহ উচ্চমানের
+          কম্পিউটারগুলি আপনার শেখার সুবিধার্থে প্রস্তুত। ক্লাসের পরে, আপনি আপনার
+          দক্ষতা বৃদ্ধির জন্য আমাদের ল্যাবে বিষয়টি অনুশীলন করতে পারেন।{" "}
+          <span className=" font-bold">কোড দুনিয়া</span>
+          -এর মাধ্যমে শেখার পুরো যাত্রা জুড়ে আপনাকে আত্মবিশ্বাসী করে তোলার জন্য
+          কোর্সগুলি ডিজাইন করা হয়েছে।
         </p>
 
         <section className=" mt-10">

@@ -49,7 +49,7 @@ const CardComponent = async ({ data }: { data: courseType }) => {
           </p>
 
           <Link
-            href={"/course/ui-ux-design"}
+            href={`/course/${data._id}`}
             className=" font-cd-bangla px-[22px] bg-cd-primary rounded-[15px] py-2 text-[20px] font-semibold text-white"
           >
             বিস্তারিত

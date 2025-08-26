@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { courseType } from "@/types/type";
 
-const PriceComponent = () => {
+const PriceComponent = ({ data }: { data: courseType }) => {
   const [sticky, setSticky] = useState(false);
 
   useEffect(() => {
@@ -36,12 +37,14 @@ const PriceComponent = () => {
           </h3>
           <div>
             <span className=" font-cd-poppins text-3xl font-bold text-cd-primary">
-              5000 BDT
+              {data.discountedPrice ? data.discountedPrice : data.sellingPrice}{" "}
+              BDT
             </span>
-
-            <del className=" font-cd-poppins text-sm font-bold text-cd-primary">
-              10000 BDT
-            </del>
+            {data.discountedPrice != 0 && (
+              <del className=" font-cd-poppins text-sm font-bold text-cd-primary">
+                {data.sellingPrice} BDT
+              </del>
+            )}
           </div>
         </div>
 

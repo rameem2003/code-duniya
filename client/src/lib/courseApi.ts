@@ -1,6 +1,8 @@
-export const allCourses = async () => {
+export const allCourses = async (limit: number = 0) => {
   try {
-    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses`);
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/courses?limit=${limit}`
+    );
     return res.json();
   } catch (error) {
     throw new Error("Failed to fetch courses");
@@ -22,5 +24,14 @@ export const singleCategory = async (id: string) => {
     return res.json();
   } catch (error) {
     throw new Error("Failed to fetch category");
+  }
+};
+
+export const singleCourse = async (id: string) => {
+  try {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${id}`);
+    return res.json();
+  } catch (error) {
+    throw new Error("Failed to fetch course");
   }
 };

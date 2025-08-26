@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -10,8 +10,22 @@ import {
 } from "@/components/ui/carousel";
 import Container from "./Container";
 import Link from "next/link";
+import { categoryType } from "@/types/type";
+import { allCategories } from "@/lib/courseApi";
 
 const CourseCategory = () => {
+  const [category, setCategory] = useState<categoryType[]>([]);
+
+  const fetchCategory = async () => {
+    let res = await allCategories();
+    console.log(res);
+    setCategory(res.data);
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
   return (
     <div className=" w-full">
       <Container>
@@ -27,19 +41,19 @@ const CourseCategory = () => {
           ]}
         >
           <CarouselContent className=" mx-0 lg:mx-6">
-            {Array.from({ length: 8 }).map((_, index) => (
+            {category.map((cat, i) => (
               <CarouselItem
-                key={index}
+                key={i}
                 className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4"
               >
                 <Link
-                  href={"/department/68752183c315f6c9b4466148"}
+                  href={`/department/${cat._id}`}
                   className=" block py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center"
                 >
                   <img src="/icon.png" alt="" className=" mx-auto" />
 
-                  <h4 className=" font-cd-bangla text-[24px] font-semibold text-white mt-2">
-                    গ্রাফিকস
+                  <h4 className=" font-cd-bangla text-base font-semibold text-white mt-2">
+                    {cat.name}
                   </h4>
                 </Link>
               </CarouselItem>

@@ -8,8 +8,9 @@ const {
  * Get All Success Story
  */
 const allSuccessStories = async (req, res) => {
+  let { limit } = req.query;
   try {
-    let data = await findAllStories();
+    let data = await findAllStories(parseInt(limit));
     res.status(200).send({
       success: true,
       data,

@@ -5,7 +5,7 @@ import { categoryType } from "@/types/type";
 const CourseComponent = ({ data }: { data: categoryType }) => {
   return (
     <section className=" mb-10">
-      <h2 className=" font-cd-bangla text-4xl mb-5 font-bold text-cd-primary">
+      <h2 className=" font-cd-bangla text-2xl md:text-3xl xl:text-5xl mb-5 font-bold text-cd-primary">
         {data.name}
       </h2>
 

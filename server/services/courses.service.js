@@ -18,13 +18,14 @@ const findCourseById = async (id) => {
   }
 };
 
-const getAllCourses = async () => {
+const getAllCourses = async (limit) => {
   try {
     let res = await courseModel
       .find()
       .populate("category")
       .populate("successStories")
-      .populate("users");
+      .populate("users")
+      .limit(limit ? limit : 0);
     return res;
   } catch (error) {
     throw new Error("Error fetching courses: " + error.message);

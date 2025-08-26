@@ -10,19 +10,26 @@ import Autoplay from "embla-carousel-autoplay";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
+import { successStoryType } from "@/types/type";
 
 interface playProps {
   state?: boolean;
   video?: string;
 }
 
-const CourseSuccessStoryComponent = () => {
+const CourseSuccessStoryComponent = ({
+  story,
+}: {
+  story: successStoryType[];
+}) => {
   const [play, setPlay] = useState<playProps>({});
   return (
     <div className=" w-full p-3 bg-slate-100 rounded-lg">
       <h2 className=" font-cd-bangla text-3xl font-bold text-cd-primary mb-5">
         সফলতার গল্প
       </h2>
+      {story.length === 0 && <p className=" text-red-500">কোনো গল্প নেই</p>}
+
       <Carousel
         opts={{
           align: "start",
@@ -35,20 +42,20 @@ const CourseSuccessStoryComponent = () => {
         ]}
       >
         <CarouselContent className=" mx-0">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <CarouselItem key={index} className="w-full p-0">
+          {story.map((item, i) => (
+            <CarouselItem key={i} className="w-full p-0">
               <Card
                 onClick={() =>
                   setPlay({
                     state: true,
-                    video: "https://youtu.be/XMJLxuff210?si=V31GXNzuLfb1XA2H",
+                    video: item.video,
                   })
                 }
-                key={index}
+                key={i}
                 className="w-full p-0 relative cursor-pointer overflow-hidden"
               >
                 <Image
-                  src="/banner.jpg"
+                  src={item.thumb}
                   alt="banner"
                   width={500}
                   height={500}

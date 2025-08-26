@@ -6,7 +6,7 @@ import { allCourses } from "@/lib/courseApi";
 import { courseType } from "@/types/type";
 
 const CourseList = async () => {
-  let { data } = await allCourses();
+  let { data } = await allCourses(3);
   let courses: courseType[] = data;
 
   return (
@@ -20,7 +20,7 @@ const CourseList = async () => {
           দ্বারা পরিপূর্ণ
         </p>
 
-        <div className=" mt-16 flex items-center justify-between gap-0 lg:gap-6 flex-wrap lg:flex-nowrap">
+        <div className=" mt-16 flex items-center justify-between gap-0 flex-wrap ">
           {courses.map((course, i) => (
             <CardComponent key={i} data={course} />
           ))}

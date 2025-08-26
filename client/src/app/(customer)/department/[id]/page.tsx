@@ -4,14 +4,8 @@ import { singleCategory } from "@/lib/courseApi";
 import { categoryType } from "@/types/type";
 import type { Metadata, ResolvingMetadata } from "next";
 import React from "react";
-interface PageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: {
-    [key: string]: string | string[] | undefined;
-  };
-}
+import { PageProps } from "./../../../types/type";
+import Advertisement from "@/components/shared/Advertisement";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -40,8 +34,8 @@ const page = async ({ params }: PageProps) => {
   return (
     <main className="py-[100px]">
       <Container>
+        <Advertisement />
         <CourseComponent data={category} />
-        <h1></h1>
       </Container>
     </main>
   );

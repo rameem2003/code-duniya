@@ -23,8 +23,9 @@ const {
  * Get All Courses Controller
  */
 const allCourses = async (req, res) => {
+  const { limit } = req.query;
   try {
-    let data = await getAllCourses();
+    let data = await getAllCourses(parseInt(limit));
     res.status(200).send({
       success: true,
       data,
