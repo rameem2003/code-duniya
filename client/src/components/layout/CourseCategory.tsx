@@ -33,7 +33,7 @@ const CourseCategory = () => {
                 className=" p-0 md:pl-4 basis-full md:basis-1/2 lg:basis-1/4"
               >
                 <Link
-                  href={"/department/graphics"}
+                  href={"/department/68752183c315f6c9b4466148"}
                   className=" block py-[17px] px-4 lg:px-[60px] bg-[#1B263B] rounded-[25px] text-center"
                 >
                   <img src="/icon.png" alt="" className=" mx-auto" />

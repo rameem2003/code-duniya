@@ -2,8 +2,13 @@ import React from "react";
 import Container from "../Container";
 import CardComponent from "@/components/shared/CardComponent";
 import Link from "next/link";
+import { allCourses } from "@/lib/courseApi";
+import { courseType } from "@/types/type";
 
-const CourseList = () => {
+const CourseList = async () => {
+  let { data } = await allCourses();
+  let courses: courseType[] = data;
+
   return (
     <section className=" pt-[170px]">
       <Container>
@@ -16,14 +21,14 @@ const CourseList = () => {
         </p>
 
         <div className=" mt-16 flex items-center justify-between gap-0 lg:gap-6 flex-wrap lg:flex-nowrap">
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
+          {courses.map((course, i) => (
+            <CardComponent key={i} data={course} />
+          ))}
         </div>
 
         <div className=" text-center">
           <Link
-            href={"/courses"}
+            href="/our-courses"
             className=" mt-10 inline-block mx-auto py-1 px-14 rounded-[15px] bg-[#778DA9] text-center font-cd-bangla text-[24px] font-bold text-white"
           >
             আরও কোর্স দেখুন

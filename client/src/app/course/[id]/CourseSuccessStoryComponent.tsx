@@ -16,7 +16,7 @@ interface playProps {
   video?: string;
 }
 
-const SuccessStoryComponent = () => {
+const CourseSuccessStoryComponent = () => {
   const [play, setPlay] = useState<playProps>({});
   return (
     <div className=" w-full p-3 bg-slate-100 rounded-lg">
@@ -88,4 +88,4 @@ const SuccessStoryComponent = () => {
   );
 };
 
-export default SuccessStoryComponent;
+export default CourseSuccessStoryComponent;

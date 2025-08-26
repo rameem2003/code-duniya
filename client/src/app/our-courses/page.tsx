@@ -1,15 +1,20 @@
+import React from "react";
 import Container from "@/components/layout/Container";
 import CourseCategory from "@/components/layout/CourseCategory";
 import CourseComponent from "@/components/shared/CourseComponent";
+import { allCategories, allCourses } from "@/lib/courseApi";
 import { Metadata } from "next";
-import React from "react";
+import { categoryType } from "@/types/type";
 
 export const metadata: Metadata = {
   title: "আমাদের কোর্সসমুহ || কোড দুনিয়া",
   description: "...",
 };
 
-const page = () => {
+const page = async () => {
+  let { data } = await allCategories();
+  let categories: categoryType[] = data;
+
   return (
     <main className="py-[100px]">
       <Container>
@@ -43,8 +48,9 @@ const page = () => {
             </p>
           </div>
 
-          <CourseComponent />
-          <CourseComponent />
+          {categories.map((category, i) => (
+            <CourseComponent data={category} key={i} />
+          ))}
         </section>
       </Container>
     </main>

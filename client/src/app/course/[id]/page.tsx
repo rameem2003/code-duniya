@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaFire } from "react-icons/fa";
-import SuccessStoryComponent from "./SuccessStoryComponent";
+
 import PriceComponent from "./PriceComponent";
+import CourseSuccessStoryComponent from "./CourseSuccessStoryComponent";
 
 const page = () => {
   const services = [
@@ -142,7 +143,7 @@ const page = () => {
               </div>
             </div>
             <div className="w-full lg:w-1/2 xl:w-5/12 relative">
-              <SuccessStoryComponent />
+              <CourseSuccessStoryComponent />
               <PriceComponent />
             </div>
           </div>

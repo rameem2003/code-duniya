@@ -4,7 +4,7 @@ const { thumbImageGenerator } = require("./common.service");
 
 const findCategoryById = async (id) => {
   try {
-    let res = await categoryModel.findById(id);
+    let res = await categoryModel.findById(id).populate("courses");
 
     return res;
   } catch (error) {
