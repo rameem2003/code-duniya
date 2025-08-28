@@ -3,6 +3,7 @@ import { Anek_Bangla, Poppins } from "next/font/google";
 import "./globals.css";
 import Navber from "@/components/shared/Navber";
 import Footer from "@/components/shared/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -68,6 +69,7 @@ export default function RootLayout({
         <Navber />
         {children}
         <Footer />
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

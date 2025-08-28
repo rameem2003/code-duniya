@@ -1,12 +1,24 @@
 "use client";
 import Container from "@/components/layout/Container";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
+import useAuth from "@/hooks/useAuth";
 
 const page = () => {
+  const { msg, login } = useAuth();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    login(email, password);
+  };
+
   return (
     <main className="">
       <Container>
@@ -24,11 +36,15 @@ const page = () => {
           </p>
 
           <section className=" mt-10 max-w-[550px] w-full p-4 rounded-lg shadow-xl">
-            <form
-              //   action="http://localhost:5000/api/v1/auth/login"
-              method="post"
-              className=" flex flex-col w-full "
-            >
+            <div className=" mb-5">
+              {msg && (
+                <Alert variant="destructive">
+                  <AlertCircleIcon />
+                  <AlertTitle>{msg}</AlertTitle>
+                </Alert>
+              )}
+            </div>
+            <form onSubmit={handleLogin} className=" flex flex-col w-full ">
               <div className="grid w-full items-center gap-3">
                 <Label
                   className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
@@ -37,6 +53,9 @@ const page = () => {
                   আপনার ইমেইল
                 </Label>
                 <Input
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
                   className=" font-cd-poppins font-medium w-full block"
                   type="email"
                   id="email"
@@ -52,6 +71,9 @@ const page = () => {
                   আপনার পাসওয়ার্ড
                 </Label>
                 <Input
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setPassword(e.target.value)
+                  }
                   className=" font-cd-poppins font-medium w-full block"
                   type="password"
                   id="password"

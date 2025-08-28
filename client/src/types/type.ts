@@ -1,3 +1,14 @@
+export interface userType {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  courses: courseType[];
+  successStory: successStoryType[];
+  isVerified: boolean;
+  block: boolean;
+  avatar: string;
+}
 export interface courseType {
   _id: string;
   title: string;
@@ -38,4 +49,12 @@ export interface PageProps {
   searchParams?: {
     [key: string]: string | string[] | undefined;
   };
+}
+
+export interface AuthContextType {
+  user: userType | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  getUser: () => Promise<void>;
 }

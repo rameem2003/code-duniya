@@ -14,7 +14,7 @@ connectDb();
 /* * Middleware */
 app.use(
   cors({
-    origin: "*", // Allow all origins
+    origin: ["http://localhost:3000"], // Allow all origins
     credentials: true, // Allow cookies to be sent
   })
 );
