@@ -18,8 +18,8 @@ import { FiUser } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
-import useAuth from "@/hooks/useAuth";
 import { Button } from "../ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navber = () => {
   const { getUser, user, logout } = useAuth();

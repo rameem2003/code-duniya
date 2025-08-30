@@ -3,6 +3,7 @@ import { Anek_Bangla, Poppins } from "next/font/google";
 import "./globals.css";
 import Navber from "@/components/shared/Navber";
 import Footer from "@/components/shared/Footer";
+import { AuthProvider } from "@/hooks/useAuth";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -62,11 +63,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${anekBangla.variable} ${poppins.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <AuthProvider>
+        <body
+          className={`${anekBangla.variable} ${poppins.variable} antialiased`}
+        >
+          {children}
+        </body>
+      </AuthProvider>
     </html>
   );
 }

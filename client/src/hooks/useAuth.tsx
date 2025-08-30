@@ -1,11 +1,14 @@
 "use client";
 import { loginRequest, logoutRequest, userRequest } from "@/lib/authApi";
-import { userType } from "@/types/type";
+import { AuthContextType, userType } from "@/types/type";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { toast } from "sonner";
 
-const useAuth = () => {
+// Create Context
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [msg, setMsg] = useState<string>("");
   const [user, setUser] = useState<userType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,7 +57,15 @@ const useAuth = () => {
     }
   };
 
-  return { login, getUser, logout, user, msg, loading };
+  // return { login, getUser, logout, user, msg, loading };
+
+  return (
+    <AuthContext.Provider
+      value={{ login, getUser, logout, msg, user, loading }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export default useAuth;
+export const useAuth = () => useContext(AuthContext)!;

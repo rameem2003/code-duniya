@@ -54,6 +54,7 @@ export interface PageProps {
 export interface AuthContextType {
   user: userType | null;
   loading: boolean;
+  msg: string;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   getUser: () => Promise<void>;

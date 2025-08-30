@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
-import useAuth from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 const page = () => {
   const { msg, login } = useAuth();

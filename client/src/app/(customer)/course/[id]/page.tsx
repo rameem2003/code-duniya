@@ -10,7 +10,7 @@ import CourseSuccessStoryComponent from "./CourseSuccessStoryComponent";
 import Advertisement from "@/components/shared/Advertisement";
 import { Metadata, ResolvingMetadata } from "next";
 import { singleCourse } from "@/lib/courseApi";
-import { courseType, PageProps } from "./../../../types/type";
+import { courseType, PageProps } from "@/types/type";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -35,7 +35,6 @@ const page = async ({ params }: PageProps) => {
   let id = await params.id;
   let data = await singleCourse(id);
   let course: courseType = data.data;
-  console.log(course);
 
   const services = [
     {
