@@ -1,5 +1,10 @@
 "use client";
-import { loginRequest, logoutRequest, userRequest } from "@/lib/authApi";
+import {
+  loginRequest,
+  logoutRequest,
+  registerRequest,
+  userRequest,
+} from "@/lib/authApi";
 import { AuthContextType, userType } from "@/types/type";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useState } from "react";
@@ -19,7 +24,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true);
       let res = await loginRequest(email, password);
-      console.log(res);
       if (!res.success) {
         setMsg(res.message);
         setLoading(false);
@@ -30,6 +34,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       router.push("/");
     } catch (error) {
       setMsg("Failed to login");
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  // register
+  const register = async (
+    name: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      setLoading(true);
+      let res = await registerRequest(name, phone, email, password);
+
+      if (!res.success) {
+        setMsg(res.message);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+
+      toast.success(res.message);
+      await login(email, password);
+    } catch (error) {
+      setMsg("Failed to register");
       setLoading(false);
       console.log(error);
     }
@@ -61,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, getUser, logout, msg, user, loading }}
+      value={{ login, register, getUser, logout, msg, user, loading }}
     >
       {children}
     </AuthContext.Provider>

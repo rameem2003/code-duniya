@@ -31,7 +31,7 @@ const Navber = () => {
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
   return (
     <nav className=" bg-cd-primary p-4 fixed top-0 left-0 w-full z-[10000000000]">
       <Container>

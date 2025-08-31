@@ -15,6 +15,28 @@ export const loginRequest = async (email: string, password: string) => {
   }
 };
 
+export const registerRequest = async (
+  name: string,
+  phone: string,
+  email: string,
+  password: string
+) => {
+  try {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({ name, phone, email, password }),
+    });
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to register: " + error.message);
+  }
+};
+
 export const logoutRequest = async () => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

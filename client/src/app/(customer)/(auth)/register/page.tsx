@@ -1,12 +1,34 @@
 "use client";
 import Container from "@/components/layout/Container";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const { user, register, loading, msg } = useAuth();
+  const [name, setName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const router = useRouter();
+
+  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    register(name, phone, email, password);
+  };
+
+  useEffect(() => {
+    if (user?.id) {
+      router.push("/");
+    }
+  }, [user]);
+
   return (
     <main className="">
       <Container>
@@ -20,11 +42,15 @@ const page = () => {
           </h2>
 
           <section className=" mt-10 max-w-[550px] w-full p-4 rounded-lg shadow-xl">
-            <form
-              //   action="http://localhost:5000/api/v1/auth/login"
-              method="post"
-              className=" flex flex-col w-full "
-            >
+            <div className=" mb-5">
+              {msg && (
+                <Alert variant="destructive">
+                  <AlertCircleIcon />
+                  <AlertTitle>{msg}</AlertTitle>
+                </Alert>
+              )}
+            </div>
+            <form onSubmit={handleRegister} className=" flex flex-col w-full ">
               <div className="grid w-full items-center gap-3 ">
                 <Label
                   className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
@@ -33,6 +59,8 @@ const page = () => {
                   আপনার নাম
                 </Label>
                 <Input
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
                   className=" font-cd-poppins font-medium w-full block"
                   type="name"
                   id="name"
@@ -47,6 +75,8 @@ const page = () => {
                   আপনার মোবাইল নম্বর
                 </Label>
                 <Input
+                  onChange={(e) => setPhone(e.target.value)}
+                  value={phone}
                   className=" font-cd-poppins font-medium w-full block"
                   type="phone"
                   id="phone"
@@ -61,6 +91,8 @@ const page = () => {
                   আপনার ইমেইল
                 </Label>
                 <Input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                   className=" font-cd-poppins font-medium w-full block"
                   type="email"
                   id="email"
@@ -76,6 +108,8 @@ const page = () => {
                   আপনার পাসওয়ার্ড
                 </Label>
                 <Input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                   className=" font-cd-poppins font-medium w-full block"
                   type="password"
                   id="password"
@@ -84,6 +118,7 @@ const page = () => {
               </div>
 
               <Button
+                disabled={loading}
                 type="submit"
                 className="bg-cd-primary cursor-pointer mt-8"
               >
