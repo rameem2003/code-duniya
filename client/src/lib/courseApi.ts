@@ -35,3 +35,18 @@ export const singleCourse = async (id: string) => {
     throw new Error("Failed to fetch course");
   }
 };
+
+export const purchaseCourse = async () => {
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/courses/purchase/`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+    return res.json();
+  } catch (error) {
+    throw new Error("Failed to purchase course");
+  }
+};

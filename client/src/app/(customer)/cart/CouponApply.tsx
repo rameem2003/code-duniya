@@ -1,21 +1,21 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useCart from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
+
 import React, { useState } from "react";
 
 const CouponApply = () => {
-  const [coupon, setCoupon] = useState<string>("");
   const { applyCoupon } = useCart();
+  const [coupon, setCoupon] = useState<string>("");
 
   const handleApplyCoupon = () => {
-    // e.preventDefault();
     applyCoupon(coupon);
   };
   return (
-    <div>
-      <div className=" mt-4">
-        <div className="flex items-center justify-between gap-2">
+    <div className="w-full">
+      <div className=" mt-4 w-full">
+        <div className="flex items-center justify-between gap-2 w-full">
           <Input
             onChange={(e) => setCoupon(e.target.value)}
             value={coupon}
@@ -27,7 +27,7 @@ const CouponApply = () => {
             onClick={handleApplyCoupon}
             className=" bg-cd-primary text-white font-cd-poppins"
           >
-            Apply
+            ছাড় কুপন
           </Button>
         </div>
       </div>

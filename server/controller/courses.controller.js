@@ -257,7 +257,7 @@ const successPurchase = async (req, res) => {
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(`${process.env.REMOTE_HOST_URL}/payment/success/${id}`);
   } else {
-    return res.redirect(`http://localhost:5173/payment/success/${id}`);
+    return res.redirect(`http://localhost:3000/payment/success/${id}`);
   }
 };
 
@@ -277,7 +277,7 @@ const failPurchase = async (req, res) => {
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(`${process.env.REMOTE_HOST_URL}/payment/failed/${id}`);
   } else {
-    return res.redirect(`http://localhost:5173/payment/failed/${id}`);
+    return res.redirect(`http://localhost:3000/payment/failed/${id}`);
   }
 };
 
@@ -297,7 +297,7 @@ const cancelPurchase = async (req, res) => {
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(`${process.env.REMOTE_HOST_URL}/payment/cancel/${id}`);
   } else {
-    return res.redirect(`http://localhost:5173/payment/cancel/${id}`);
+    return res.redirect(`http://localhost:3000/payment/cancel/${id}`);
   }
 };
 

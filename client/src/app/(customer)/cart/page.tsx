@@ -1,60 +1,58 @@
 "use client";
 import Container from "@/components/layout/Container";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import Image from "next/image";
-import { cartType } from "@/types/type";
-import { getCart } from "@/lib/cartApi";
 import CouponApply from "./CouponApply";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/useCart";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 
 const page = () => {
-  const router = useRouter();
-  const [cart, setCart] = useState<cartType>();
-
-  const fetchCart = async () => {
-    try {
-      let res = await getCart();
-      console.log(res);
-
-      setCart(res.data);
-      return;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  let { cart, loading, fetchCart, deleteCart, goToPurchase } = useCart();
 
   useEffect(() => {
     fetchCart();
   }, []);
 
   if (!cart) {
-    return <h2>Loading</h2>;
+    return (
+      <div className=" py-[120px]">
+        <Container>
+          <h2 className=" font-cd-bangla text-[36px] font-bold text-black">
+            কোর্স ইনফরমেশন পাওয়া যায়নি
+          </h2>
+
+          <Button asChild>
+            <Link
+              href="/"
+              className=" cursor-pointer font-cd-bangla text-xl font-bold text-cd-primary"
+            >
+              হোম পেজ
+            </Link>
+          </Button>
+        </Container>
+      </div>
+    );
   }
 
   return (
     <main className="py-[120px]">
+      {loading && <LoadingComponent />}
       <Container>
-        <div className=" flex items-center justify-between">
-          <div className="w-10/12">
+        <div className=" flex items-center justify-between flex-wrap">
+          <div className="w-full md:w-10/12">
             <h2 className=" font-cd-bangla text-[36px] font-bold text-black">
               কোর্স ইনফরমেশন: {cart?.course.title}
             </h2>
           </div>
-          <div className="w-2/12">
-            <Image
-              className="ml-auto"
-              src={cart?.course.thumb as string}
-              alt="thumbnail"
-              width={100}
-              height={100}
-            />
-          </div>
         </div>
         <section className=" mt-10">
-          <div className="flex items-start justify-between gap-5">
+          <div className="flex items-start justify-between gap-5 flex-wrap md:flex-nowrap">
             <div className="w-full lg:w-5/12">
               <Image
+                className="w-full"
                 src={cart?.course.thumb as string}
                 alt="thumbnail"
                 width={500}
@@ -118,12 +116,28 @@ const page = () => {
               </Table>
 
               <CouponApply />
+
+              <div className="flex items-center justify-between mt-2 gap-2">
+                <Button
+                  onClick={goToPurchase}
+                  variant={"default"}
+                  className="bg-cd-primary hover:bg-green-500 cursor-pointer text-white w-[49%]"
+                >
+                  কনফার্ম
+                </Button>
+                <Button
+                  onClick={deleteCart}
+                  variant={"destructive"}
+                  className="bg-cd-primary cursor-pointer text-white w-[49%]"
+                >
+                  বাতিল করুন
+                </Button>
+              </div>
             </div>
           </div>
 
           <div className=" mt-10"></div>
         </section>
-        wef
       </Container>
     </main>
   );

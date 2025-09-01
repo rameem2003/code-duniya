@@ -4,6 +4,7 @@ import "./globals.css";
 import Navber from "@/components/shared/Navber";
 import Footer from "@/components/shared/Footer";
 import { AuthProvider } from "@/hooks/useAuth";
+import { CartProvider } from "@/hooks/useCart";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -64,11 +65,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <body
-          className={`${anekBangla.variable} ${poppins.variable} antialiased`}
-        >
-          {children}
-        </body>
+        <CartProvider>
+          <body
+            className={`${anekBangla.variable} ${poppins.variable} antialiased`}
+          >
+            {children}
+          </body>
+        </CartProvider>
       </AuthProvider>
     </html>
   );

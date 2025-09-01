@@ -77,3 +77,14 @@ export interface AuthContextType {
   logout: () => Promise<void>;
   getUser: () => Promise<void>;
 }
+
+export interface CartContextType {
+  cart: cartType | null;
+  loading: boolean;
+  msg: string;
+  goToPurchase: () => Promise<void>;
+  applyCoupon: (coupon: string) => Promise<void>;
+  fetchCart: () => Promise<void>;
+  addCart: (id: string) => Promise<void>;
+  deleteCart: () => Promise<void>;
+}

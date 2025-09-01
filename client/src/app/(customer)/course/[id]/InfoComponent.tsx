@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import useCart from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
 import { courseType } from "@/types/type";
 import { FaFire } from "react-icons/fa";
+import { useCart } from "@/hooks/useCart";
 
 const InfoComponent = ({ course }: { course: courseType }) => {
   const { addCart } = useCart();

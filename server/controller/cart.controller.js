@@ -11,9 +11,7 @@ const { code } = require("../validator/coupon.validator");
 
 const getUserCart = async (req, res) => {
   if (!req.user) {
-    return res
-      .status(400)
-      .send({ success: false, message: "Unauthorized user" });
+    return res.status(400).send({ success: false, msg: "Unauthorized user" });
   }
 
   try {
@@ -73,16 +71,14 @@ const addToCart = async (req, res) => {
 
 const applyCoupon = async (req, res) => {
   if (!req.user) {
-    return res
-      .status(400)
-      .send({ success: false, message: "Unauthorized user" });
+    return res.status(400).send({ success: false, msg: "Unauthorized user" });
   }
 
   let { data, error } = code.safeParse(req.body.code);
   if (error) {
     return res
       .status(400)
-      .json({ success: false, message: JSON.parse(error.message)[0].message });
+      .json({ success: false, msg: JSON.parse(error.message)[0].message });
   }
 
   let coupon = await findCouponCode(data);

@@ -34,6 +34,23 @@ export const addToCart = async (courseId: string) => {
   }
 };
 
+export const removeFromCart = async (id: string) => {
+  try {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/remove`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    return res.json();
+  } catch (error) {
+    throw new Error("Failed to remove course from cart");
+  }
+};
+
 export const requestCoupon = async (code: string) => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/applycode`, {
