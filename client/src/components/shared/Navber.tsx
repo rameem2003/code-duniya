@@ -20,6 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { FaCartShopping } from "react-icons/fa6";
 
 const Navber = () => {
   const { getUser, user, logout } = useAuth();
@@ -278,10 +279,13 @@ const Navber = () => {
                     <FiUser />
                     {user.name}
                   </p>
-                  <p className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
-                    <IoSettingsOutline />
-                    Settings
-                  </p>
+                  <Link
+                    href="/cart"
+                    className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
+                  >
+                    <FaCartShopping />
+                    Cart
+                  </Link>
                   <p className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
                     <FiUser />
                     View Profile

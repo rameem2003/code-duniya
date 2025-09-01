@@ -9,6 +9,18 @@ export interface userType {
   block: boolean;
   avatar: string;
 }
+
+export interface cartType {
+  _id: string;
+  userId: string;
+  course: courseType;
+  coupon: string;
+  discount: number;
+  finalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface courseType {
   _id: string;
   title: string;

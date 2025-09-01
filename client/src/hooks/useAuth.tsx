@@ -81,7 +81,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const getUser = async () => {
     try {
       let res = await userRequest();
-      console.log(res);
       setUser(res.data);
     } catch (error) {
       console.log(error);
