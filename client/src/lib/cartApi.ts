@@ -1,15 +1,12 @@
-import { cookies } from "next/headers";
+"use client";
 
 export const getCart = async () => {
   try {
-    const cookieStore = cookies(); // Get cookies from the request
-    const cookieHeader = cookieStore.toString(); // Convert to header format
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
       method: "GET",
-      //   credentials: "include",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookieHeader, // Forward cookies
       },
       cache: "no-store", // Avoid caching
     });
@@ -34,5 +31,21 @@ export const addToCart = async (courseId: string) => {
     console.log(error);
 
     throw new Error("Failed to add course to cart");
+  }
+};
+
+export const requestCoupon = async (code: string) => {
+  try {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/applycode`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code }),
+    });
+    return res.json();
+  } catch (error) {
+    throw new Error("Failed to apply coupon");
   }
 };

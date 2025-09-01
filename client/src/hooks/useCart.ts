@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "./useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { addToCart } from "@/lib/cartApi";
+import { addToCart, requestCoupon } from "@/lib/cartApi";
 
 const useCart = () => {
   const router = useRouter();
@@ -25,7 +25,27 @@ const useCart = () => {
     }
   };
 
-  return { addCart, msg, loading };
+  const applyCoupon = async (code: string) => {
+    try {
+      if (!user?.id) {
+        router.push("/login");
+        return;
+      }
+      let res = await requestCoupon(code);
+      if (res.success) {
+        toast.success(res.msg);
+        router.refresh();
+      } else {
+        toast.error(res.msg);
+      }
+      // router.push("/cart");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to add to cart");
+    }
+  };
+
+  return { addCart, applyCoupon, msg, loading };
 };
 
 export default useCart;
