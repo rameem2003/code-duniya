@@ -7,7 +7,7 @@ import {
 } from "@/lib/authApi";
 import { AuthContextType, userType } from "@/types/type";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 // Create Context
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       let res = await logoutRequest();
       setUser(null);
-      router.refresh();
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -81,11 +81,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const getUser = async () => {
     try {
       let res = await userRequest();
-      setUser(res.data);
+      if (res.success) {
+        setUser(res.data);
+      } else {
+        router.push("/login");
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   // return { login, getUser, logout, user, msg, loading };
 

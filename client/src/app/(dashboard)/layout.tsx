@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import { Anek_Bangla, Poppins } from "next/font/google";
 import "./globals.css";
-import Navber from "@/components/shared/Navber";
-import Footer from "@/components/shared/Footer";
+import { useAuth } from "@/hooks/useAuth";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -20,56 +21,23 @@ const poppins = Poppins({
   style: "normal",
 });
 
-export const metadata: Metadata = {
-  title: "দেশের সর্ব বৃহৎ আইটি ট্রেনিং প্লাটফর্ম - কোড দুনিয়া",
-  description: "দেশের সর্ব বৃহৎ আইটি ট্রেনিং প্লাটফর্ম",
-  keywords: [
-    "Number one IT training platform in Bangladesh",
-    "Best IT training platform in Bangladesh",
-    "Best IT training platform in Dhaka",
-    "Best web development company in Dhaka",
-    "Best web development company in Bangladesh",
-    "react js development",
-    "Mahmood Hassan Rameem",
-    "MERN stack development",
-    "web development",
-    "web design",
-    "Bangladesh",
-    "ROL Studio Bangladesh",
-    "Next.js",
-  ],
-  openGraph: {
-    title: "কোড দুনিয়া",
-    description: "দেশের সর্ব বৃহৎ আইটি ট্রেনিং প্লাটফর্ম",
-    url: "https://rolstudiobangladesh.vercel.app/",
-    siteName: "Code Duniya",
-    images: [
-      {
-        url: "https://rolstudiobangladesh.vercel.app/logo.png",
-        width: 1200,
-        height: 630,
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { user } = useAuth();
+
   return (
     <html lang="en">
+      <title>Dashboard | Code Duniya</title>
       <body
         className={`${anekBangla.variable} ${poppins.variable} antialiased`}
       >
-        <aside>
-          {" "}
-          <p className="font-cd-poppins">Side bar </p>
-        </aside>
-        {children}
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="w-full h-screen">{children}</main>
+        </SidebarProvider>
       </body>
     </html>
   );
