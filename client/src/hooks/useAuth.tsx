@@ -6,7 +6,7 @@ import {
   userRequest,
 } from "@/lib/authApi";
 import { AuthContextType, userType } from "@/types/type";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<userType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const pathName = usePathname();
 
   // login
   const login = async (email: string, password: string) => {
@@ -80,13 +81,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // get user
   const getUser = async () => {
     try {
+      setLoading(true);
       let res = await userRequest();
       if (res.success) {
         setUser(res.data);
+        setLoading(false);
       } else {
-        router.push("/login");
+        if (pathName == "/") {
+          setLoading(false);
+        } else {
+          setLoading(false);
+          router.push("/login");
+        }
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -94,8 +103,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     getUser();
   }, []);
-
-  // return { login, getUser, logout, user, msg, loading };
 
   return (
     <AuthContext.Provider

@@ -1,13 +1,21 @@
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import Advertisement from "@/components/shared/Advertisement";
+import Image from "next/image";
 import React from "react";
 
 const page = () => {
   return (
-    <section className=" p-4 flex items-center justify-between">
-      <h1 className=" font-cd-bangla text-2xl md:text-3xl font-bold">
-        আপনাকে স্বাগত
-      </h1>
-      <SidebarTrigger />
+    <section className="">
+      <div className="">
+        <Image
+          src="/dashboardpic.png"
+          alt="dashboard"
+          width={1000}
+          height={1000}
+          className=" w-full"
+        />
+
+        <Advertisement />
+      </div>
     </section>
   );
 };

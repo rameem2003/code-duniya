@@ -2,8 +2,10 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Anek_Bangla, Poppins } from "next/font/google";
-import "./globals.css";
 import { useAuth } from "@/hooks/useAuth";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import Header from "@/components/layout/Dashboard/Header";
+import "./globals.css";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -26,8 +28,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user } = useAuth();
-
+  const { user, loading } = useAuth();
+  if (loading) {
+    return <LoadingComponent />;
+  }
   return (
     <html lang="en">
       <title>Dashboard | Code Duniya</title>
@@ -36,7 +40,10 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full h-screen">{children}</main>
+          <main className="w-full h-screen">
+            <Header />
+            {children}
+          </main>
         </SidebarProvider>
       </body>
     </html>

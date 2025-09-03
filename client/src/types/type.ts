@@ -75,7 +75,7 @@ export interface AuthContextType {
     password: string
   ) => Promise<void | null>;
   logout: () => Promise<void>;
-  getUser: () => Promise<void>;
+  getUser: () => Promise<void | null>;
 }
 
 export interface CartContextType {

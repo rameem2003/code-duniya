@@ -69,7 +69,7 @@ export function NavMain({
         >
           <SidebarMenuItem className=" cursor-pointer">
             <CollapsibleTrigger asChild>
-              <Link href="/dashboard">
+              <Link href="/dashboard/mycourse">
                 <SidebarMenuButton
                   tooltip="আমার কোর্স"
                   className=" cursor-pointer"
