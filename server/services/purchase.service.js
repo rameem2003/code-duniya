@@ -1,5 +1,14 @@
 const purchaseModel = require("../models/purchase.model");
 
+const findPurchases = async () => {
+  try {
+    let data = await purchaseModel.find().populate("course").populate("userId");
+    return data;
+  } catch (error) {
+    throw new Error("Error fetching purchases: " + error.message);
+  }
+};
+
 const findPurchaseById = async (id) => {
   try {
     let data = await purchaseModel
@@ -15,7 +24,7 @@ const findPurchaseById = async (id) => {
 const findPurchasesByUserId = async (userId) => {
   try {
     let data = await purchaseModel
-      .find({ userId })
+      .findOne({ userId })
       .populate("course")
       .populate("userId");
     return data;
@@ -70,6 +79,7 @@ const deletePurchase = async (id) => {
 };
 
 module.exports = {
+  findPurchases,
   findPurchaseById,
   findPurchasesByUserId,
   addToPurchase,
