@@ -54,6 +54,20 @@ export interface successStoryType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface purchaseType {
+  _id: string;
+  userId: userType;
+  course: courseType;
+  isApproved: false;
+  courseCompleted: boolean;
+  paid: boolean;
+  coupon: string;
+  discount: number;
+  finalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
 export interface PageProps {
   params: {
     id: string;
@@ -87,4 +101,11 @@ export interface CartContextType {
   fetchCart: () => Promise<void>;
   addCart: (id: string) => Promise<void>;
   deleteCart: () => Promise<void>;
+}
+
+export interface CourseContextType {
+  courseList: purchaseType[] | null;
+  loading?: boolean;
+  msg?: string;
+  fetchUserCourseList: () => Promise<void>;
 }

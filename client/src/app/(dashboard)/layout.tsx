@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { user, loading } = useAuth();
-  if (loading) {
+  if (!user || loading) {
     return <LoadingComponent />;
   }
   return (

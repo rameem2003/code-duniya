@@ -4,9 +4,15 @@ import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { userPurchaseRequest } from "@/lib/purchaseApi";
+import { useCourse } from "@/hooks/useCourse";
+import { Badge } from "@/components/ui/badge";
 
 const page = () => {
-  const { user } = useAuth();
+  const { courseList } = useCourse();
+  console.log(courseList);
+
+  // const { user } = useAuth();
   return (
     <section className="p-1 mt-5">
       <h2 className="text-2xl font-cd-bangla text-cd-primary font-bold">
@@ -14,13 +20,13 @@ const page = () => {
       </h2>
 
       <div className=" mt-10 flex items-center justify-between gap-2 flex-wrap ">
-        {user?.courses.length === 0 && (
+        {courseList?.length === 0 && (
           <p className=" text-red-500 font-cd-bangla text-lg">
             আপনার কোন কোর্স ক্রয় নেই
           </p>
         )}
 
-        {user?.courses.map((course, i) => (
+        {courseList?.map((course, i) => (
           <Link
             className=" block w-full md:w-[49.5%]"
             href={`/dashboard/mycourse/${course._id}`}
@@ -29,8 +35,8 @@ const page = () => {
             <Card className=" p-1 border-2 border-cd-primary mb-1  w-full bg-white hover:bg-slate-300 duration-200">
               <CardContent className=" px-1 flex flex-col md:flex-row gap-5 items-center justify-start">
                 <Image
-                  src={course.thumb}
-                  alt={course.title}
+                  src={course.course.thumb}
+                  alt={course.course.title}
                   width={500}
                   height={500}
                   className=" w-full md:w-auto h-full md:h-[100px] rounded-lg"
@@ -38,11 +44,29 @@ const page = () => {
 
                 <div>
                   <h3 className=" font-cd-poppins text-2xl font-bold text-cd-primary">
-                    {course.title}
+                    {course.course.title}
                   </h3>
                   <p className=" mt-1 font-cd-bangla font-medium text-gray-500">
                     লাইভ ক্লাস
                   </p>
+
+                  <div className=" mt-2">
+                    {course.courseCompleted ? (
+                      <Badge
+                        variant="secondary"
+                        className="bg-green-500 text-white"
+                      >
+                        Completed
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="secondary"
+                        className="bg-red-500 text-white "
+                      >
+                        Progressing
+                      </Badge>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -24,7 +24,7 @@ const findPurchaseById = async (id) => {
 const findPurchasesByUserId = async (userId) => {
   try {
     let data = await purchaseModel
-      .findOne({ userId })
+      .find({ userId })
       .populate("course")
       .populate("userId");
     return data;

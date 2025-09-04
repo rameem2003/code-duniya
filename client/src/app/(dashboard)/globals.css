@@ -3,6 +3,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* HTML: <div class="loader"></div> */
+.loader {
+  --c: no-repeat linear-gradient(#0d1b2a 0 0);
+  background: var(--c), var(--c), var(--c), var(--c), var(--c), var(--c),
+    var(--c), var(--c), var(--c);
+  background-size: 16px 16px;
+  animation: l32-1 1s infinite, l32-2 1s infinite;
+}
+@keyframes l32-1 {
+  0%,
+  100% {
+    width: 45px;
+    height: 45px;
+  }
+  35%,
+  65% {
+    width: 65px;
+    height: 65px;
+  }
+}
+
 @theme inline {
   --font-cd-bangla: var(--font-anek-bangla);
   --font-cd-poppins: var(--font-poppins);
