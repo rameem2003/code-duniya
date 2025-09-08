@@ -86,6 +86,8 @@ const getUserProfile = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        address: user.address,
+        phone: user.phone,
         role: user.role,
         isVerified: user.isVerified,
         avatar: user.avatar,

@@ -83,7 +83,7 @@ export function NavUser() {
               <Link href="/dashboard/profile">
                 <DropdownMenuItem>
                   <BadgeCheck />
-                  Account
+                  অ্যাকাউন্ট
                 </DropdownMenuItem>
               </Link>
               {/* <DropdownMenuItem>
@@ -99,7 +99,7 @@ export function NavUser() {
 
             <DropdownMenuItem onClick={logout}>
               <LogOut />
-              Log out
+              লগ আউট
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
