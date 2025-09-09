@@ -4,6 +4,7 @@ import {
   logoutRequest,
   registerRequest,
   userRequest,
+  userUpdateRequest,
 } from "@/lib/authApi";
 import { AuthContextType, userType } from "@/types/type";
 import { usePathname, useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ import { toast } from "sonner";
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [msg, setMsg] = useState<string>("");
+  const [msg, setMsg] = useState<string | null>("");
   const [user, setUser] = useState<userType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -67,11 +68,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // update user
+  const updateUser = async (
+    name: string,
+    email: string,
+    address: string,
+    phone: string
+  ) => {
+    try {
+      setLoading(true);
+      let res = await userUpdateRequest(name, email, address, phone);
+      setMsg(res.message);
+      setLoading(false);
+      await getUser();
+    } catch (error) {
+      setMsg("Failed to update user");
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
   // logout
   const logout = async () => {
     try {
       let res = await logoutRequest();
       setUser(null);
+      setMsg(null);
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -106,7 +128,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, register, getUser, logout, msg, user, loading }}
+      value={{
+        login,
+        register,
+        getUser,
+        updateUser,
+        logout,
+        msg,
+        user,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -3,14 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import React from "react";
+import React, { useState } from "react";
 
 const ProfileForm = () => {
-  const { user } = useAuth();
-  console.log(user);
+  const { user, updateUser, getUser } = useAuth();
+  const [name, setName] = useState<string>(user?.name || "");
+  const [email, setEmail] = useState<string>(user?.email || "");
+  const [phone, setPhone] = useState<string>(user?.phone || "");
+  const [address, setAddress] = useState<string>(user?.address || "");
+
+  const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await updateUser(name, email, address, phone);
+    // console.log(name, email, address, phone);
+    // await getUser();
+  };
 
   return (
-    <form className="w-full p-2">
+    <form onSubmit={handleUpdateUser} className="w-full p-2">
       <div className="grid w-full items-center gap-3 mb-5">
         <Label
           className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
@@ -19,13 +29,13 @@ const ProfileForm = () => {
           আপনার নাম
         </Label>
         <Input
-          //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          //     setEmail(e.target.value)
-          //   }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
           className=" font-cd-poppins font-medium w-full block"
           type="text"
           id="name"
-          defaultValue={user?.name}
+          value={name}
         />
       </div>
       <div className="grid w-full items-center gap-3 mb-5">
@@ -36,13 +46,13 @@ const ProfileForm = () => {
           ইমেইল
         </Label>
         <Input
-          //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          //     setEmail(e.target.value)
-          //   }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
           className=" font-cd-poppins font-medium w-full block"
           type="email"
           id="email"
-          defaultValue={user?.email}
+          value={email}
         />
       </div>
       <div className="grid w-full items-center gap-3 mb-5">
@@ -53,13 +63,13 @@ const ProfileForm = () => {
           ফোন নম্বর
         </Label>
         <Input
-          //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          //     setEmail(e.target.value)
-          //   }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPhone(e.target.value)
+          }
           className=" font-cd-poppins font-medium w-full block"
           type="text"
           id="phone"
-          defaultValue={user?.phone}
+          value={phone}
         />
       </div>
       <div className="grid w-full items-center gap-3 mb-5">
@@ -70,13 +80,13 @@ const ProfileForm = () => {
           ঠিকানা
         </Label>
         <Input
-          //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          //     setEmail(e.target.value)
-          //   }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAddress(e.target.value)
+          }
           className=" font-cd-poppins font-medium w-full block"
           type="text"
           id="address"
-          defaultValue={user?.address}
+          value={address}
         />
       </div>
 

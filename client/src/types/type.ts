@@ -82,13 +82,19 @@ export interface PageProps {
 export interface AuthContextType {
   user: userType | null;
   loading: boolean;
-  msg: string;
+  msg: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (
     name: string,
     phone: string,
     email: string,
     password: string
+  ) => Promise<void | null>;
+  updateUser: (
+    name: string,
+    email: string,
+    address: string,
+    phone: string
   ) => Promise<void | null>;
   logout: () => Promise<void>;
   getUser: () => Promise<void | null>;
