@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { FaUser } from "react-icons/fa";
 
 export function NavUser() {
   const { user, logout } = useAuth();
@@ -40,7 +40,7 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className=" cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user?.avatar} alt={user?.name} />
@@ -80,10 +80,16 @@ export function NavUser() {
             </DropdownMenuGroup>
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuGroup>
-              <Link href="/dashboard/profile">
-                <DropdownMenuItem>
+              {!user?.isVerified && (
+                <DropdownMenuItem className=" cursor-pointer">
                   <BadgeCheck />
-                  অ্যাকাউন্ট
+                  অ্যাকাউন্ট ভেরিফাই করুন
+                </DropdownMenuItem>
+              )}
+              <Link href="/dashboard/profile">
+                <DropdownMenuItem className=" cursor-pointer">
+                  <FaUser />
+                  আমার অ্যাকাউন্ট
                 </DropdownMenuItem>
               </Link>
               {/* <DropdownMenuItem>
@@ -97,8 +103,11 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem onClick={logout}>
-              <LogOut />
+            <DropdownMenuItem
+              className="text-red-500 font-cd-bangla font-bold hover:text-red-600 cursor-pointer"
+              onClick={logout}
+            >
+              <LogOut className=" text-red-500 hover:text-red-600" />
               লগ আউট
             </DropdownMenuItem>
           </DropdownMenuContent>

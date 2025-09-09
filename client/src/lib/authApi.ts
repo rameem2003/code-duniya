@@ -62,6 +62,30 @@ export const userUpdateRequest = async (
   }
 };
 
+export const userPasswordUpdateRequest = async (
+  oldPassword: string,
+  newPassword: string,
+  confirmPassword: string
+) => {
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/update-password`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({ oldPassword, newPassword, confirmPassword }),
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to update password: " + error.message);
+  }
+};
+
 export const logoutRequest = async () => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

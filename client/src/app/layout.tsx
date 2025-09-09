@@ -6,6 +6,7 @@ import Footer from "@/components/shared/Footer";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import { CourseProvider } from "@/hooks/useCourse";
+import { Toaster } from "@/components/ui/sonner";
 
 const anekBangla = Anek_Bangla({
   variable: "--font-anek-bangla",
@@ -72,6 +73,7 @@ export default function RootLayout({
               className={`${anekBangla.variable} ${poppins.variable} antialiased`}
             >
               {children}
+              <Toaster richColors position="bottom-right" />
             </body>
           </CourseProvider>
         </CartProvider>

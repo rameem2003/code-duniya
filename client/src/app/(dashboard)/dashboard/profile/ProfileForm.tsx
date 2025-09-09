@@ -6,17 +6,15 @@ import { useAuth } from "@/hooks/useAuth";
 import React, { useState } from "react";
 
 const ProfileForm = () => {
-  const { user, updateUser, getUser } = useAuth();
+  const { user, updateUser, loading } = useAuth();
   const [name, setName] = useState<string>(user?.name || "");
   const [email, setEmail] = useState<string>(user?.email || "");
   const [phone, setPhone] = useState<string>(user?.phone || "");
   const [address, setAddress] = useState<string>(user?.address || "");
 
-  const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await updateUser(name, email, address, phone);
-    // console.log(name, email, address, phone);
-    // await getUser();
+    updateUser(name, email, address, phone);
   };
 
   return (
@@ -91,10 +89,11 @@ const ProfileForm = () => {
       </div>
 
       <Button
+        disabled={loading}
         type="submit"
         className="bg-cd-primary cursor-pointer w-full hover:bg-[#081522]"
       >
-        আপডেট করুন
+        {loading ? "অপেক্ষা করুন..." : " আপডেট করুন"}
       </Button>
     </form>
   );

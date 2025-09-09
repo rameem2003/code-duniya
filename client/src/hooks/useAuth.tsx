@@ -3,6 +3,7 @@ import {
   loginRequest,
   logoutRequest,
   registerRequest,
+  userPasswordUpdateRequest,
   userRequest,
   userUpdateRequest,
 } from "@/lib/authApi";
@@ -78,6 +79,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true);
       let res = await userUpdateRequest(name, email, address, phone);
+      if (!res.success) {
+        setMsg(res.message);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
+      setMsg(res.message);
+      setLoading(false);
+      await getUser();
+    } catch (error) {
+      setMsg("Failed to update user");
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const updatePassword = async (
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ) => {
+    try {
+      setLoading(true);
+      let res = await userPasswordUpdateRequest(
+        oldPassword,
+        newPassword,
+        confirmPassword
+      );
+      if (!res.success) {
+        setMsg(res.message);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
       setMsg(res.message);
       setLoading(false);
       await getUser();
@@ -133,6 +170,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         register,
         getUser,
         updateUser,
+        updatePassword,
         logout,
         msg,
         user,

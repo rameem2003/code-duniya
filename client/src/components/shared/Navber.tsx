@@ -21,6 +21,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { FaCartShopping } from "react-icons/fa6";
+import { PiAppWindowFill } from "react-icons/pi";
 
 const Navber = () => {
   const { getUser, user, logout } = useAuth();
@@ -275,33 +276,33 @@ const Navber = () => {
                       : "translate-y-[10px] opacity-0 z-[-1]"
                   } bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}
                 >
-                  <p className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
-                    <FiUser />
+                  <p className="flex items-center gap-[5px] font-cd-poppins rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
+                    <FaUser />
                     {user.name}
                   </p>
                   <Link
                     href="/cart"
-                    className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
+                    className="flex items-center gap-[5px] font-cd-bangla rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                   >
                     <FaCartShopping />
-                    Cart
+                    আপনার পছন্দকৃত কোর্স
                   </Link>
                   <Link
                     href="/dashboard"
-                    className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
+                    className="flex items-center gap-[5px] font-cd-bangla rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                   >
-                    <FiUser />
-                    Dashboard
+                    <PiAppWindowFill />
+                    ড্যাশবোর্ড এ চলুন
                   </Link>
 
                   <div className="mt-3 border-t dark:border-slate-700 border-gray-200 pt-[5px]">
                     <Button
                       onClick={() => logout()}
                       variant="secondary"
-                      className="flex w-full cursor-pointer items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-red-500 dark:hover:bg-red-500/20 text-red-500 hover:bg-red-50"
+                      className="flex w-full font-cd-bangla font-bold cursor-pointer items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-red-500 dark:hover:bg-red-500/20 text-red-500 hover:bg-red-50"
                     >
                       <TbLogout2 />
-                      Logout
+                      লগআউট
                     </Button>
                   </div>
                 </div>

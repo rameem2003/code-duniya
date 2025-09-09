@@ -96,6 +96,11 @@ export interface AuthContextType {
     address: string,
     phone: string
   ) => Promise<void | null>;
+  updatePassword: (
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ) => Promise<void | null>;
   logout: () => Promise<void>;
   getUser: () => Promise<void | null>;
 }
