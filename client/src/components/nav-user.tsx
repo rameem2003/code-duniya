@@ -30,7 +30,7 @@ import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 
 export function NavUser() {
-  const { user, logout } = useAuth();
+  const { user, logout, verifyEmail } = useAuth();
   const { isMobile } = useSidebar();
 
   return (
@@ -81,7 +81,10 @@ export function NavUser() {
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuGroup>
               {!user?.isVerified && (
-                <DropdownMenuItem className=" cursor-pointer">
+                <DropdownMenuItem
+                  onClick={verifyEmail}
+                  className=" cursor-pointer"
+                >
                   <BadgeCheck />
                   অ্যাকাউন্ট ভেরিফাই করুন
                 </DropdownMenuItem>

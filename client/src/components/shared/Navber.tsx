@@ -22,6 +22,7 @@ import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { FaCartShopping } from "react-icons/fa6";
 import { PiAppWindowFill } from "react-icons/pi";
+import { Badge } from "../ui/badge";
 
 const Navber = () => {
   const { getUser, user, logout } = useAuth();
@@ -44,7 +45,7 @@ const Navber = () => {
           </Link>
 
           {/* nav links */}
-          <ul className="items-center gap-[20px] text-[1rem] text-[#424242] md:flex hidden">
+          <ul className="items-center gap-[20px] text-[1rem] text-[#424242] lg:flex hidden">
             <li className=" font-cd-bangla text-lg md:text-xl 2xl:text-[24px] font-semibold text-white">
               <Link href="/">হোম</Link>
             </li>
@@ -266,7 +267,11 @@ const Navber = () => {
                     alt="avatar"
                     className="w-[35px] h-[35px] rounded-full object-cover"
                   />
-                  <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute bottom-[0px] right-0 border-2 border-white"></div>
+                  {user.isVerified ? (
+                    <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute bottom-[0px] right-0 border-2 border-white"></div>
+                  ) : (
+                    <div className="w-[10px] h-[10px] rounded-full bg-yellow-500 absolute bottom-[0px] right-0 border-2 border-white"></div>
+                  )}
                 </div>
 
                 <div
@@ -274,7 +279,7 @@ const Navber = () => {
                     accountMenuOpen
                       ? "translate-y-0 opacity-100 z-[1]"
                       : "translate-y-[10px] opacity-0 z-[-1]"
-                  } bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}
+                  } bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-[-65px] md:right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}
                 >
                   <p className="flex items-center gap-[5px] font-cd-poppins rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
                     <FaUser />
@@ -321,7 +326,7 @@ const Navber = () => {
 
             <CiMenuFries
               onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-              className="text-[1.8rem] text-white cursor-pointer md:hidden flex"
+              className="text-[1.8rem] text-white cursor-pointer lg:hidden flex"
             />
           </div>
 
@@ -329,7 +334,7 @@ const Navber = () => {
           <aside
             className={` ${
               mobileSidebarOpen ? " right-0 " : "right-[-150%] "
-            } md:hidden bg-slate-600 p-4 text-center absolute  top-[65px]  sm:w-[300px] w-full rounded-md  transition-all duration-300 z-[100]`}
+            } lg:hidden bg-slate-600 p-4 text-center absolute  top-[65px]  sm:w-[300px] w-full rounded-md  transition-all duration-300 z-[100]`}
           >
             <ul className="items-start gap-[20px] text-[1rem] text-gray-600 flex flex-col">
               <li

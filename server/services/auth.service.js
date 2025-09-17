@@ -281,9 +281,9 @@ const clearResetPasswordToken = async (id) => {
   }
 };
 
-const clearTokenSchema = async (userID) => {
+const clearTokenSchema = async (id) => {
   try {
-    await emailVerifyTokenModel.findOneAndDelete({ userID });
+    await emailVerifyTokenModel.findOneAndDelete({ _id: id });
   } catch (error) {
     throw new Error("Error clearing token schema: " + error.message);
   }

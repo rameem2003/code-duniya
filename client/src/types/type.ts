@@ -101,6 +101,7 @@ export interface AuthContextType {
     newPassword: string,
     confirmPassword: string
   ) => Promise<void | null>;
+  verifyEmail: () => Promise<void>;
   logout: () => Promise<void>;
   getUser: () => Promise<void | null>;
 }

@@ -1,5 +1,6 @@
 "use client";
 import {
+  emailVerificationTokenRequest,
   loginRequest,
   logoutRequest,
   registerRequest,
@@ -125,6 +126,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // send email verification token
+  const verifyEmail = async () => {
+    try {
+      const promise = () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ name: "Sonner" }), 2000)
+        );
+
+      toast.promise(emailVerificationTokenRequest(), {
+        loading: "Please wait...",
+        success: (data: any) => {
+          return `${data.message} toast has been added`;
+        },
+        error: "Error",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // logout
   const logout = async () => {
     try {
@@ -171,6 +192,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         getUser,
         updateUser,
         updatePassword,
+        verifyEmail,
         logout,
         msg,
         user,

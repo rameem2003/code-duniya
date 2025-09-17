@@ -86,6 +86,23 @@ export const userPasswordUpdateRequest = async (
   }
 };
 
+export const emailVerificationTokenRequest = async () => {
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/send-email-verification`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    throw new Error(
+      "Failed to send email verification token: " + error.message
+    );
+  }
+};
+
 export const logoutRequest = async () => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
