@@ -1,6 +1,7 @@
 "use client";
 import {
   emailVerificationTokenRequest,
+  forgotPasswordRequest,
   loginRequest,
   logoutRequest,
   registerRequest,
@@ -129,19 +130,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // send email verification token
   const verifyEmail = async () => {
     try {
-      const promise = () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ name: "Sonner" }), 2000)
-        );
-
       toast.promise(emailVerificationTokenRequest(), {
         loading: "Please wait...",
         success: (data: any) => {
-          return `${data.message} toast has been added`;
+          return `${data.message}`;
         },
         error: "Error",
       });
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // send forgot password request
+  const forgotPassword = async (email: string) => {
+    try {
+      setLoading(true);
+      let res = await forgotPasswordRequest(email);
+      if (!res.success) {
+        setMsg(null);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+      setLoading(false);
+      setMsg(res.message);
+    } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -167,7 +182,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(res.data);
         setLoading(false);
       } else {
-        if (pathName == "/") {
+        if (pathName == "/" || pathName == "/forgot-password") {
           setLoading(false);
         } else {
           setLoading(false);
@@ -193,6 +208,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         updateUser,
         updatePassword,
         verifyEmail,
+        forgotPassword,
         logout,
         msg,
         user,

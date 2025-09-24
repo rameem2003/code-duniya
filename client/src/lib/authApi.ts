@@ -103,6 +103,27 @@ export const emailVerificationTokenRequest = async () => {
   }
 };
 
+export const forgotPasswordRequest = async (email: string) => {
+  console.log(email);
+
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to send forgot password email: " + error.message);
+  }
+};
+
 export const logoutRequest = async () => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

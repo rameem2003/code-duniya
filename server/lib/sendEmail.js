@@ -6,8 +6,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: "camren.huels82@ethereal.email",
-    pass: "XQ3Sun2N2Cq57FF2aw",
+    user: "vivian65@ethereal.email",
+    pass: "teSd29gJ66THzkYV8P",
   },
 });
 
