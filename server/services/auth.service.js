@@ -261,8 +261,12 @@ const createResetPasswordTokenLink = async (userID) => {
     newToken.save();
 
     let tokenLink =
+      // process.env.SYSTEM_ENV == "development"
+      //   ? `http://localhost:5000/api/v1/auth/reset-password/${token}`
+      //   : `https://code-duniya.onrender.com/api/v1/auth/reset-password/${token}`;
+
       process.env.SYSTEM_ENV == "development"
-        ? `http://localhost:5000/api/v1/auth/reset-password/${token}`
+        ? `http://localhost:3000/reset-password?token=${token}`
         : `https://code-duniya.onrender.com/api/v1/auth/reset-password/${token}`;
 
     return tokenLink;

@@ -233,13 +233,13 @@ const verifyResetPasswordToken = async (req, res) => {
         .send({ success: false, message: "User not found" });
     }
 
-    // return res.status(200).send({
-    //   success: true,
-    //   message: "Token is valid",
-    //   user,
-    // });
+    return res.status(200).send({
+      success: true,
+      message: "Token is valid",
+      user,
+    });
 
-    res.redirect("https://rolstudiobangladesh.vercel.app/");
+    // res.redirect("https://rolstudiobangladesh.vercel.app/");
   } catch (error) {
     return res
       .status(500)

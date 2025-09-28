@@ -103,6 +103,7 @@ export interface AuthContextType {
   ) => Promise<void | null>;
   verifyEmail: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
+  verifyResetPasswordToken: (token: string) => Promise<boolean>;
   logout: () => Promise<void>;
   getUser: () => Promise<void | null>;
 }

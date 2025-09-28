@@ -5,6 +5,7 @@ import {
   loginRequest,
   logoutRequest,
   registerRequest,
+  resetPasswordTokenVerifyRequest,
   userPasswordUpdateRequest,
   userRequest,
   userUpdateRequest,
@@ -161,6 +162,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const verifyResetPasswordToken = async (token: string) => {
+    try {
+      let res = await resetPasswordTokenVerifyRequest(token);
+      return res.success;
+    } catch (error) {
+      console.error("Failed to verify reset password token:", error);
+      return false;
+    }
+  };
+
   // logout
   const logout = async () => {
     try {
@@ -216,6 +227,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         updatePassword,
         verifyEmail,
         forgotPassword,
+        verifyResetPasswordToken,
         logout,
         msg,
         user,
