@@ -124,6 +124,22 @@ export const forgotPasswordRequest = async (email: string) => {
   }
 };
 
+export const resetPasswordTokenVerifyRequest = async (token: string) => {
+  // working in progress
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password-verify/${token}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to verify reset token: " + error.message);
+  }
+};
+
 export const logoutRequest = async () => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

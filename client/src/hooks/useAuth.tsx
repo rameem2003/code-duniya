@@ -182,12 +182,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(res.data);
         setLoading(false);
       } else {
-        if (pathName == "/" || pathName == "/forgot-password") {
-          setLoading(false);
-        } else {
-          setLoading(false);
+        setLoading(false);
+
+        if (pathName == "/dashboard" || pathName?.startsWith("/dashboard/")) {
           router.push("/login");
+          // toast.error("Please login to access the dashboard");
+          return;
         }
+        // if (pathName == "/" || pathName == "/forgot-password") {
+        //   setLoading(false);
+        // } else {
+        //   setLoading(false);
+        //   router.push("/login");
+        // }
       }
     } catch (error) {
       setLoading(false);
