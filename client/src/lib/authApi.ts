@@ -140,6 +140,29 @@ export const resetPasswordTokenVerifyRequest = async (token: string) => {
   }
 };
 
+export const resetPasswordRequest = async (
+  token: string,
+  newPassword: string,
+  confirmPassword: string
+) => {
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password/${token}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newPassword, confirmPassword }),
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to reset password: " + error.message);
+  }
+};
+
 export const logoutRequest = async () => {
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

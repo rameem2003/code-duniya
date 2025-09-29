@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@/components/layout/Container";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -7,15 +7,23 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MailCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [email, setEmail] = useState<string>("");
-  const { forgotPassword, msg, loading } = useAuth();
+  const router = useRouter();
+  const { forgotPassword, msg, loading, user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await forgotPassword(email);
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
 
   if (msg) {
     return (

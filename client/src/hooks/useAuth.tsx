@@ -5,6 +5,7 @@ import {
   loginRequest,
   logoutRequest,
   registerRequest,
+  resetPasswordRequest,
   resetPasswordTokenVerifyRequest,
   userPasswordUpdateRequest,
   userRequest,
@@ -155,7 +156,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
       setLoading(false);
-      setMsg(res.message);
+      // setMsg(res.message);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -167,8 +168,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       let res = await resetPasswordTokenVerifyRequest(token);
       return res.success;
     } catch (error) {
-      console.error("Failed to verify reset password token:", error);
+      console.log(error);
       return false;
+    }
+  };
+
+  const passwordReset = async (
+    token: string,
+    newPassword: string,
+    confirmPassword: string
+  ) => {
+    try {
+      setLoading(true);
+      let res = await resetPasswordRequest(token, newPassword, confirmPassword);
+      if (!res.success) {
+        setMsg(null);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+      setLoading(false);
+      toast.success(res.message);
+      router.push("/login");
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -228,6 +252,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         verifyEmail,
         forgotPassword,
         verifyResetPasswordToken,
+        passwordReset,
         logout,
         msg,
         user,

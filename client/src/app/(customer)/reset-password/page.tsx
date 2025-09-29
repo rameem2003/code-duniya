@@ -1,16 +1,20 @@
 "use client";
-import Container from "@/components/layout/Container";
-import { useAuth } from "@/hooks/useAuth";
-import { notFound, useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Container from "@/components/layout/Container";
+import { notFound, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/hooks/useAuth";
 
 const page = () => {
-  const { verifyResetPasswordToken } = useAuth();
+  const { loading, passwordReset, verifyResetPasswordToken } = useAuth();
   const params = useSearchParams();
-  const router = useRouter();
   const token = params.get("token");
   const [isValidToken, setIsValidToken] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const checkVerificationToken = async () => {
     try {
@@ -29,6 +33,12 @@ const page = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // checkVerificationToken();
+    await passwordReset(token as string, password, confirmPassword);
   };
 
   useEffect(() => {
@@ -77,6 +87,53 @@ const page = () => {
               আপনার টোকেন যাচাই সফল হয়েছে। এখন নতুন পাসওয়ার্ড সেট করুন।
             </p>
             {/* TODO: Add password reset form here */}
+
+            <section className=" mt-10 max-w-[550px] w-full p-4 rounded-lg shadow-xl">
+              <form onSubmit={handleSubmit} className=" flex flex-col w-full ">
+                <div className="grid w-full items-center gap-3 mb-5">
+                  <Label
+                    className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
+                    htmlFor="password"
+                  >
+                    নতুন পাসওয়ার্ড
+                  </Label>
+                  <Input
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setPassword(e.target.value)
+                    }
+                    className=" font-cd-poppins font-medium w-full block"
+                    type="password"
+                    id="password"
+                    placeholder="নতুন পাসওয়ার্ড"
+                  />
+                </div>
+                <div className="grid w-full items-center gap-3 mb-5">
+                  <Label
+                    className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
+                    htmlFor="confirm-password"
+                  >
+                    কনফার্ম নতুন পাসওয়ার্ড
+                  </Label>
+                  <Input
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setConfirmPassword(e.target.value)
+                    }
+                    className=" font-cd-poppins font-medium w-full block"
+                    type="password"
+                    id="confirm-password"
+                    placeholder="কনফার্ম নতুন পাসওয়ার্ড"
+                  />
+                </div>
+
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  className="bg-cd-primary cursor-pointer mt-8"
+                >
+                  {loading ? "অপেক্ষা করুন..." : "পাসওয়ার্ড রিসেট করুন"}
+                </Button>
+              </form>
+            </section>
           </div>
         </Container>
       </main>
