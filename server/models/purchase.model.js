@@ -36,6 +36,10 @@ const purchaseSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    certificate: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

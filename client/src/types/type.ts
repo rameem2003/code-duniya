@@ -69,6 +69,7 @@ export interface purchaseType {
   finalPrice: number;
   createdAt: string;
   updatedAt: string;
+  certificate: string;
 }
 export interface PageProps {
   params: {

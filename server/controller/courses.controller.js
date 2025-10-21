@@ -1,3 +1,7 @@
+const ejs = require("ejs");
+const path = require("path");
+const fs = require("fs");
+const puppeteer = require("puppeteer");
 const sendEmail = require("../lib/sendEmail");
 const { findUserById } = require("../services/auth.service");
 const {
@@ -12,6 +16,7 @@ const {
   findCourseById,
   coursePurchase,
   pushNewPurchaseCourse,
+  completeUserCourse,
 } = require("../services/courses.service");
 const {
   updatePurchase,
@@ -301,6 +306,82 @@ const cancelPurchase = async (req, res) => {
   }
 };
 
+const completeCourse = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).send({ success: false, msg: "Unauthorized user" });
+  }
+
+  const { id } = req.params;
+
+  try {
+    let data = await findPurchaseById(id);
+    console.log(data);
+
+    const name = data.userId.name;
+    const course = data.course.title;
+    const date = new Date().toLocaleDateString();
+
+    const designPath = `file://${path.join(
+      __dirname,
+      "../views",
+      "design.jpg"
+    )}`;
+
+    const html = await ejs.renderFile(
+      path.join(__dirname, "../views", "certificate.ejs"),
+      {
+        name,
+        course,
+        date,
+        designPath,
+      }
+    );
+
+    // Ensure certificates folder exists
+    const certDir = path.join(__dirname, "../certificates");
+    await fs.existsSync(certDir);
+
+    // Generate unique file name
+    const fileName = `${name.replace(/\s+/g, "_")}_${Date.now()}.pdf`;
+    const filePath = path.join(certDir, fileName);
+
+    // Launch Puppeteer
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
+
+    // Generate PDF
+    await page.pdf({
+      path: filePath, // save directly to disk
+      format: "A4",
+      printBackground: true,
+      landscape: true,
+      margin: { top: "0mm", bottom: "0mm" },
+    });
+
+    await browser.close();
+
+    console.log(`✅ Certificate saved: ${filePath}`);
+
+    let certificate = await completeUserCourse(data._id, fileName);
+
+    // You can save the certificate URL in DB if you want
+    const certificateUrl = `/certificates/${fileName}`;
+
+    res.status(200).json({
+      success: true,
+      msg: "Certificate generated successfully",
+      file: certificate.certificate,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, msg: "Error completing course", error });
+  }
+};
+
 module.exports = {
   allCourses,
   getSingleCourse,
@@ -311,4 +392,5 @@ module.exports = {
   successPurchase,
   failPurchase,
   cancelPurchase,
+  completeCourse,
 };

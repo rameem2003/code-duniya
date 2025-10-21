@@ -2,7 +2,6 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import { userPurchaseRequest } from "@/lib/purchaseApi";
 import { useCourse } from "@/hooks/useCourse";
@@ -11,8 +10,6 @@ import { Badge } from "@/components/ui/badge";
 const page = () => {
   const { courseList } = useCourse();
   console.log(courseList);
-
-  // const { user } = useAuth();
   return (
     <section className="p-1 mt-5">
       <h2 className="text-2xl font-cd-bangla text-cd-primary font-bold">
@@ -27,11 +24,7 @@ const page = () => {
         )}
 
         {courseList?.map((course, i) => (
-          <Link
-            className=" block w-full md:w-[49.5%]"
-            href={`/dashboard/mycourse/${course._id}`}
-            key={i}
-          >
+          <div className=" block w-full md:w-[49.5%]">
             <Card className=" p-1 border-2 border-cd-primary mb-1  w-full bg-white hover:bg-slate-300 duration-200">
               <CardContent className=" px-1 flex flex-col md:flex-row gap-5 items-center justify-start">
                 <Image
@@ -50,7 +43,7 @@ const page = () => {
                     লাইভ ক্লাস
                   </p>
 
-                  <div className=" mt-2">
+                  <div className=" mt-2 flex items-center gap-3">
                     {course.courseCompleted ? (
                       <Badge
                         variant="secondary"
@@ -66,11 +59,22 @@ const page = () => {
                         Progressing
                       </Badge>
                     )}
+
+                    {course?.certificate && (
+                      <a
+                        className="text-blue-500 underline"
+                        href={course.certificate}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        আপনার সার্টিফিকেট
+                      </a>
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </Link>
+          </div>
         ))}
       </div>
     </section>

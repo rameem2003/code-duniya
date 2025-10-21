@@ -69,6 +69,19 @@ const updatePurchase = async (id) => {
   }
 };
 
+const approvePurchaseById = async (id) => {
+  try {
+    let data = await purchaseModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { isApproved: true } },
+      { new: true }
+    );
+    return data;
+  } catch (error) {
+    throw new Error("Error approving purchase: " + error.message);
+  }
+};
+
 const deletePurchase = async (id) => {
   try {
     let data = await purchaseModel.deleteOne({ _id: id });
@@ -84,5 +97,6 @@ module.exports = {
   findPurchasesByUserId,
   addToPurchase,
   updatePurchase,
+  approvePurchaseById,
   deletePurchase,
 };

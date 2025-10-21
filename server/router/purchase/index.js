@@ -8,6 +8,7 @@ const {
   getAllPurchases,
   getSinglePurchase,
   getSingleUserPurchase,
+  approvedPurchase,
 } = require("../../controller/purchase.controller");
 const verifyAuthentication = require("../../middlewares/middleware");
 
@@ -22,5 +23,10 @@ router.get(
   getSinglePurchase
 );
 router.get("/order/purchase/user", verifyAuthentication, getSingleUserPurchase);
+router.post(
+  "/order/purchase/approve/:id",
+  verifyAuthentication,
+  approvedPurchase
+);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const deleteFile = require("../lib/deleteFile");
 const sslcz = require("../lib/paymentGateway");
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
+const purchaseModel = require("../models/purchase.model");
 const userModel = require("../models/user.model");
 const { thumbImageGenerator } = require("./common.service");
 const { addToPurchase } = require("./purchase.service");
@@ -178,6 +179,28 @@ const pushNewPurchaseCourse = async (userId, courseId) => {
   }
 };
 
+const completeUserCourse = async (id, file) => {
+  let certificateURL =
+    process.env.SYSTEM_ENV === "production"
+      ? `${process.env.REMOTE_HOST_URL}/certificates/${file}`
+      : `http://localhost:5000/certificates/${file}`;
+  try {
+    let data = await purchaseModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          courseCompleted: true,
+          certificate: certificateURL,
+        },
+      },
+      { new: true }
+    );
+
+    return data;
+  } catch (error) {
+    throw new Error("Error updating the course completion: " + error.message);
+  }
+};
 module.exports = {
   findCourseById,
   getAllCourses,
@@ -186,4 +209,5 @@ module.exports = {
   courseDelete,
   coursePurchase,
   pushNewPurchaseCourse,
+  completeUserCourse,
 };

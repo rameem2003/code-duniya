@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const requestIp = require("request-ip");
@@ -12,6 +13,7 @@ const app = express();
 connectDb();
 
 /* * Middleware */
+app.use("/certificates", express.static(path.join(__dirname, "certificates")));
 app.use(
   cors({
     origin: ["http://localhost:3000"], // Allow all origins

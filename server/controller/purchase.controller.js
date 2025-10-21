@@ -3,6 +3,7 @@ const {
   findPurchases,
   findPurchaseById,
   findPurchasesByUserId,
+  approvePurchaseById,
 } = require("../services/purchase.service");
 
 const getAllPurchases = async (req, res) => {
@@ -60,4 +61,39 @@ const getSingleUserPurchase = async (req, res) => {
   }
 };
 
-module.exports = { getAllPurchases, getSinglePurchase, getSingleUserPurchase };
+const approvedPurchase = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).send({ success: false, msg: "Unauthorized user" });
+  }
+
+  const { id } = req.params;
+
+  try {
+    let data = await findPurchaseById(id);
+    if (!data) {
+      return res
+        .status(404)
+        .send({ success: false, msg: "Purchase not found" });
+    }
+
+    await approvePurchaseById(id);
+
+    res.status(200).send({
+      success: true,
+      msg: "Purchase approved successfully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Error approving purchase",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = {
+  getAllPurchases,
+  getSinglePurchase,
+  getSingleUserPurchase,
+  approvedPurchase,
+};
