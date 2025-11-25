@@ -1,9 +1,8 @@
 "use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/useCart";
-
-import React, { useState } from "react";
 
 const CouponApply = () => {
   const { applyCoupon } = useCart();

@@ -1,6 +1,6 @@
+import React from "react";
 import Container from "@/components/layout/Container";
 import { Metadata } from "next";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "আমাদের সম্পর্কে || কোড দুনিয়া",

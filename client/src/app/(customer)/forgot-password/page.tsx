@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 
 const page = () => {
   const [email, setEmail] = useState<string>("");
-  const router = useRouter();
   const { forgotPassword, msg, loading, user } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

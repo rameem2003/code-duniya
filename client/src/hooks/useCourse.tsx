@@ -2,10 +2,12 @@
 import { userPurchaseRequest } from "@/lib/purchaseApi";
 import { CourseContextType, purchaseType } from "@/types/type";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./useAuth";
 
 const CourseContext = createContext<CourseContextType | null>(null);
 
 export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
   const [courseList, setCourseList] = useState<purchaseType[]>([]);
   const fetchUserCourseList = async () => {
     try {
@@ -18,7 +20,7 @@ export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     fetchUserCourseList();
-  }, []);
+  }, [user]);
 
   return (
     <CourseContext.Provider value={{ courseList, fetchUserCourseList }}>

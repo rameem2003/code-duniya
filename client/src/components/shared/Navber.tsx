@@ -1,28 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Container from "../layout/Container";
-// react icons
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { FaTasks, FaUser } from "react-icons/fa";
-import { TbLogout2, TbUsersGroup } from "react-icons/tb";
-import { CiMenuFries } from "react-icons/ci";
-import {
-  MdLaptopMac,
-  MdOutlineArrowRightAlt,
-  MdOutlineKeyboardArrowRight,
-} from "react-icons/md";
-import { BsBuildings, BsCalendar2Date } from "react-icons/bs";
-import { AiOutlineFire } from "react-icons/ai";
-import { BiSupport } from "react-icons/bi";
-import { FiUser } from "react-icons/fi";
-import { IoSettingsOutline } from "react-icons/io5";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { FaCartShopping } from "react-icons/fa6";
 import { PiAppWindowFill } from "react-icons/pi";
-import { Badge } from "../ui/badge";
+// react icons
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { FaTasks, FaUser } from "react-icons/fa";
+import { TbLogout2, TbUsersGroup } from "react-icons/tb";
+import { CiMenuFries } from "react-icons/ci";
+import { MdOutlineArrowRightAlt } from "react-icons/md";
+import { BsBuildings, BsCalendar2Date } from "react-icons/bs";
 
 const Navber = () => {
   const { getUser, user, logout } = useAuth();
@@ -31,6 +21,15 @@ const Navber = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isMegaMenuCollapse, setIsMegaMenuCollapse] = useState(false);
   const [megaMenuSubItemsOpen, setMegaMenuSubItemsOpen] = useState("");
+  const ref = useRef<HTMLDivElement>(HTMLDivElement.prototype);
+
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      ref.current.contains(e.target as Node)
+        ? setMobileSidebarOpen(true)
+        : setMobileSidebarOpen(false);
+    });
+  }, []);
 
   useEffect(() => {
     getUser();
@@ -255,7 +254,7 @@ const Navber = () => {
 
           {/* user account */}
 
-          <div className="flex items-center gap-[15px]">
+          <div ref={ref} className="flex items-center gap-[15px]">
             {user ? (
               <div
                 className="flex items-center gap-[10px] cursor-pointer relative"
@@ -339,7 +338,7 @@ const Navber = () => {
             <ul className="items-start gap-[20px] text-[1rem] text-gray-600 flex flex-col">
               <li
                 onClick={() => setIsMegaMenuCollapse(!isMegaMenuCollapse)}
-                className=" font-cd-bangla text-[24px] font-semibold text-white"
+                className=" font-cd-bangla text-[24px] font-semibold text-white hidden"
               >
                 কোর্স সমুহ
                 <IoIosArrowDown
@@ -356,10 +355,6 @@ const Navber = () => {
                   isMegaMenuCollapse ? "hidden" : "block"
                 } group font-[500] ml-6`}
               >
-                <h4 className=" font-cd-bangla text-base font-semibold text-white">
-                  More Products
-                </h4>
-
                 <ul
                   className={`${
                     megaMenuSubItemsOpen === "more_product" ? "flex" : "hidden"
@@ -377,12 +372,24 @@ const Navber = () => {
                 </ul>
               </div>
 
-              <li className=" font-cd-bangla text-[24px] font-semibold text-white">
+              <Link
+                href="/our-courses"
+                className=" font-cd-bangla text-[24px] font-semibold text-white"
+              >
+                কোর্সসমুহ
+              </Link>
+              <Link
+                href="/about"
+                className=" font-cd-bangla text-[24px] font-semibold text-white"
+              >
+                আমাদের সম্পর্কে
+              </Link>
+              <Link
+                href="/contact"
+                className=" font-cd-bangla text-[24px] font-semibold text-white"
+              >
                 যোগাযোগ
-              </li>
-              <li className=" font-cd-bangla text-[24px] font-semibold text-white">
-                ক্যারিয়ার গাইডলাইন
-              </li>
+              </Link>
             </ul>
           </aside>
         </div>

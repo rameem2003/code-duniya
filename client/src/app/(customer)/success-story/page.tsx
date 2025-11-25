@@ -1,7 +1,7 @@
+import React from "react";
 import Container from "@/components/layout/Container";
 import SuccessStoryComponent from "@/components/shared/SuccessStoryComponent";
 import { Metadata } from "next";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "আমাদের সফলতার গল্পসমুহ || কোড দুনিয়া",

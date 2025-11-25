@@ -1,13 +1,13 @@
 "use client";
 import Container from "@/components/layout/Container";
 import React, { useEffect } from "react";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 import Image from "next/image";
-import CouponApply from "./CouponApply";
 import Link from "next/link";
+import CouponApply from "./CouponApply";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
-import LoadingComponent from "@/components/shared/LoadingComponent";
 
 const page = () => {
   let { cart, loading, fetchCart, deleteCart, goToPurchase } = useCart();

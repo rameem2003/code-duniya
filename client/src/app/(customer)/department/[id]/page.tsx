@@ -1,11 +1,10 @@
+import React from "react";
+import type { Metadata, ResolvingMetadata } from "next";
 import Container from "@/components/layout/Container";
 import CourseComponent from "@/components/shared/CourseComponent";
-import { singleCategory } from "@/lib/courseApi";
-import { categoryType } from "@/types/type";
-import type { Metadata, ResolvingMetadata } from "next";
-import React from "react";
-import { PageProps } from "./../../../types/type";
 import Advertisement from "@/components/shared/Advertisement";
+import { singleCategory } from "@/lib/courseApi";
+import { categoryType, PageProps } from "@/types/type";
 
 type Props = {
   params: Promise<{ id: string }>;

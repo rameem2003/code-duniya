@@ -2,10 +2,10 @@ import React from "react";
 import Container from "@/components/layout/Container";
 import CourseCategory from "@/components/layout/CourseCategory";
 import CourseComponent from "@/components/shared/CourseComponent";
+import Advertisement from "@/components/shared/Advertisement";
 import { allCategories, allCourses } from "@/lib/courseApi";
 import { Metadata } from "next";
 import { categoryType } from "@/types/type";
-import Advertisement from "@/components/shared/Advertisement";
 
 export const metadata: Metadata = {
   title: "আমাদের কোর্সসমুহ || কোড দুনিয়া",
