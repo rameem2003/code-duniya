@@ -21,7 +21,7 @@ const Navber = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isMegaMenuCollapse, setIsMegaMenuCollapse] = useState(false);
   const [megaMenuSubItemsOpen, setMegaMenuSubItemsOpen] = useState("");
-  const ref = useRef<HTMLDivElement>(HTMLDivElement.prototype);
+  const ref = useRef<HTMLDivElement | any>(null);
 
   useEffect(() => {
     document.addEventListener("click", (e) => {
